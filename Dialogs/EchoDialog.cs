@@ -16,11 +16,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             context.Wait(MessageReceivedAsync);
         }
-
+        // Azure page: https://portal.azure.com/#blade/WebsitesExtension/BotsIFrameBlade/id/%2Fsubscriptions%2Fed3b27fa-21db-4e94-8061-2d654c6b87d5%2FresourceGroups%2Ffsps60312botservicetest%2Fproviders%2FMicrosoft.Web%2Fsites%2Ffsps60312botservicetest
+        // Unicode convert: https://www.ifreesite.com/unicode-ascii-ansi.htm
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            await context.PostAsync(System.Net.WebUtility.HtmlEncode("你說了「" + message.Text + "」"));
+            await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
             context.Wait(MessageReceivedAsync);
         }
     }
