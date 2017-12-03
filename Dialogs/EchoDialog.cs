@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using System.Net.Http;
+using System.Text;
 
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
@@ -19,7 +20,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            await context.PostAsync("你說了「" + message.Text+ "」");
+            await context.PostAsync(Encoding.Convert(Encoding.Default, Encoding.UTF8, "你說了「" + message.Text + "」"));
             context.Wait(MessageReceivedAsync);
         }
     }
