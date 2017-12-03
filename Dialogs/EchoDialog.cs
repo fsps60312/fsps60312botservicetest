@@ -20,7 +20,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            await context.PostAsync(Encoding.Convert(Encoding.Default, Encoding.UTF8, "你說了「" + message.Text + "」"));
+            await context.PostAsync(System.Net.WebUtility.HtmlEncode("你說了「" + message.Text + "」"));
             context.Wait(MessageReceivedAsync);
         }
     }
