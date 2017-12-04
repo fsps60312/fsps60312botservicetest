@@ -46,7 +46,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                     case 7: await context.PostAsync("\u771f\u7684\u8981\u5e6b\u6211\u4fdd\u5bc6\u54e6\uff01(\u52fe\u5c0f\u62c7\u6307"/*真的要幫我保密哦！(勾小拇指*/); break;
                                     default:
                                         {
-                                            switch ((lastUserMessageData.repeat - 8) % 9)
+                                            switch ((lastUserMessageData.repeat - 8) % 10)
                                             {
                                                 case 0: await context.PostAsync("\u5c31\u662f\u5462......"/*就是呢......*/); break;
                                                 case 1: await context.PostAsync("\u6211\u89ba\u5f97......"/*我覺得......*/); break;
@@ -56,7 +56,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                                 case 5: await context.PostAsync("\u58de\u900f\u4e86\uff0c\u771f\u7684\u58de\u900f\u4e86\uff01><"/*壞透了，真的壞透了！><*/); break;
                                                 case 6: await context.PostAsync("\u751f\u6c23\u6c23\u5566><"/*生氣氣啦><*/); break;
                                                 case 7: await context.PostAsync("\u6c92\u4e86\uff0c\u4f60\u9084\u8981\u6211\u8aaa\u751a\u9ebc\uff1f"/*沒了，你還要我說甚麼？*/); break;
-                                                case 8: await context.PostAsync("\u597d\u5566\u5176\u5be6SP\u4f5c\u696d\u4e5f\u662f\u6eff\u597d\u73a9\u7684\uff0c\u53ea\u662f\u5462......"/*好啦其實SP作業也是滿好玩的，只是呢......*/); break;
+                                                case 8: await context.PostAsync("\u597d\u5566\u5176\u5be6\u52a9\u6559\u4eba\u4e5f\u6eff\u597d\u7684\uff0c\u4e5f\u5f88\u53b2\u5bb3\uff0c\u56de\u7b54\u554f\u984c\u90fd\u5f88\u5feb\uff5e"/*好啦其實助教人也滿好的，也很厲害，回答問題都很快～*/); break;
+                                                case 9: await context.PostAsync("\u800c\u4e14\u4f5c\u696d\u4e5f\u662f\u5f88\u597d\u73a9\u3001\u53ef\u4ee5\u5b78\u5230\u5f88\u591a\u6771\u897f\uff01\u53ea\u662f\u5462......"/*而且作業也是很好玩、可以學到很多東西！只是呢......*/); break;
                                                 default: await YouFoundABug($"lastUserMessageData: {JsonConvert.SerializeObject(lastUserMessageData)}"); break;
                                             }
                                         }
