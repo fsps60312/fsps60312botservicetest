@@ -26,12 +26,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*§A»¡¤F¡u*/ + message.Text + "\u300d"/*¡v*/);
             if (message.Text=="What you know about me?")
             {
-                await context.PostAsync(context.UserData.GetType().ToString());
-                await context.PostAsync(JsonConvert.SerializeObject(context.UserData));
-                await context.PostAsync(context.UserData.GetValue<string>("Id"));
-                await context.PostAsync(context.UserData.GetValue<string>("Name"));
-                await context.PostAsync(context.UserData.GetValue<string>("Properties"));
-                await context.PostAsync($"Id: {message.From.Id}\n" + $"Name: {message.From.Name}\n" + $"Properties: {message.From.Properties.ToString()}");
+                await context.PostAsync($"Your Id: {message.From.Id}<br/>" + $"Your Name: {message.From.Name}<br/>" + $"Your Properties: {message.From.Properties}");
             }
             //StringBuilder sb = new StringBuilder();
             //foreach (var v in context.UserData as System.Collections.IEnumerable) sb.Append(v);

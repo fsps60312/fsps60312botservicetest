@@ -22,12 +22,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             // check if activity is of type message
             if (activity != null && activity.GetActivityType() == ActivityTypes.Message)
             {
-                var stateClient = activity.GetStateClient();
-                var userData = await stateClient.BotState.GetUserDataAsync(activity.ChannelId, activity.From.Id);
-                userData.SetProperty<string>("Id", activity.From.Id);
-                userData.SetProperty<string>("Name", activity.From.Name);
-                userData.SetProperty<string>("Properties", activity.From.Properties.ToString());
-                await stateClient.BotState.SetUserDataAsync(activity.ChannelId, activity.From.Id, userData);
                 await Conversation.SendAsync(activity, () => new EchoDialog());
             }
             else
