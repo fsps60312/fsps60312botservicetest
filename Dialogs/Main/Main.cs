@@ -69,9 +69,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         {
                             throw new NotImplementedException();
                         }
-                    case "What you know about me?":
+                    case "\u4f60\u5c0d\u6211\u4e86\u89e3\u591a\u5c11\uff1f"/*你對我了解多少？*/:
                         {
-                            await context.PostAsync($"\u2193These are what I know about you\u2193<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
+                            await context.PostAsync(/*↓我知道你的資訊有這麼多↓*/$"\u2193\u6211\u77e5\u9053\u4f60\u7684\u8cc7\u8a0a\u6709\u9019\u9ebc\u591a\u2193<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
                         }
                         break;
                     default:
