@@ -26,9 +26,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         {
             switch (message.Text)
             {
-                case "https://www.facebook.com/CodingSimplifyLife/posts/1995730270697235":
-                    await p1995730270697235.MessageReceivedAsync(context, argument,message);
-                    return true;
+                case "https://codingsimplifylife.blogspot.tw/":await context.PostAsync("code風景區！！！歡迎常來逛逛～～～");return true;
+                case "https://www.facebook.com/CodingSimplifyLife/posts/1995730270697235": await p1995730270697235.MessageReceivedAsync(context, argument,message); return true;
+                case "https://codingsimplifylife.blogspot.tw/2016/04/c.html":await context.PostAsync("給新手的C++教學！！！號稱網路上對新手最友善的C++教學，歡迎推薦給親朋好友，或提供改善建議哦！");return true;
                 default:
                     {
                         if (message.Text.StartsWith("http://") || message.Text.StartsWith("https://"))
@@ -36,6 +36,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             if (message.Text.StartsWith("https://www.facebook.com/CodingSimplifyLife/posts/"))
                             {
                                 await context.PostAsync("Oops......這篇文沒有彩蛋哦～試試看別篇吧XD");
+                            }
+                            else if(message.Text.StartsWith("https://codingsimplifylife.blogspot.tw/"))
+                            {
+                                await context.PostAsync("這是「code風景區」的連結，不是「Code風景區」的連結哦(?)XDD");
                             }
                             else
                             {
