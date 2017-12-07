@@ -54,9 +54,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 break;
                             case Constants.Commands.C1:
                                 {
+                                    await context.PostAsync("\\幹話排行榜/ <(_ _)>");
                                     var content = string.Join("<br/>", ganTalkBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
                                     if (content == "") content = "目前沒有資料TwT";
-                                    await context.PostAsync(System.Net.WebUtility.HtmlEncode("\\幹話排行榜/ <(_ _)><br/>" + content));
+                                    await context.PostAsync(content);
                                 }
                                 break;
                             case Constants.Commands.C2:
@@ -177,7 +178,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             public int repeat;
         }
         Dictionary<string, LastUserMessageData> LastUserMessage = new Dictionary<string, LastUserMessageData>();
-        GanTalkBoard ganTalkBoard = new Main.GanTalkBoard();
+        GanTalkBoard ganTalkBoard = new GanTalkBoard();
         int GetRepeatCount(string userId,string message)
         {
             var lastUserMessageData = GetLastUserMessage(userId);
