@@ -30,7 +30,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"說話","話" },
             {"借我錢","我沒錢><" },
             {"不要","好吧，你壞壞 :p" },
-            {"對","沒錯，就是這樣！😎" }
+            {"對","沒錯，就是這樣！😎" },
+            {"Bot","嘿，什麼事？ ^_^" }
         };
         private async Task<bool> Main(IDialogContext context, IAwaitable<IMessageActivity> argument, string message)
         {

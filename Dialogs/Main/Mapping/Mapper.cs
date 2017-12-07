@@ -23,7 +23,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Mapping
             {"help","我要說甚麼" },
             {"我要怎麼說點話","我要說甚麼" },
             {"我應該要說甚麼","我要說甚麼" },
-            {"SP 助教怎麼樣","SP助教怎麼樣" }
+            {"SP 助教怎麼樣","SP助教怎麼樣" },
+            {"Chat bot","Bot" },
+            {"bot","Bot" },
+            {"chatbot","Bot" },
+            {"Chatbot","Bot" }
         };
         public static string Map(string message)
         {
