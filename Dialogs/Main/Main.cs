@@ -105,7 +105,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 switch ((int)(Rand.NextDouble() * 6))
                                 {
                                     case 0: break;
-                                    case 1: msg = "\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + msg + "\u300d"/*」*/; break;
+                                    case 1: msg = "你說了「"/*你說了「*/ + msg + "」"/*」*/; break;
                                     case 2: msg = "\u597d\u5566\uff0c"/*好啦，*/+ msg; break;
                                     case 3: msg = msg + " XDD"; break;
                                     case 4: msg = msg + " www"; break;
