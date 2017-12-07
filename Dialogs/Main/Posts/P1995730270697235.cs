@@ -41,11 +41,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                 Size = TextSize.Medium,
                 Weight = TextWeight.Normal
             });
-            context.Activity.
-            card.Actions.Add(new SuggestedActions
-            {
+            //context.Activity.
+            //card.Actions.Add(new SuggestedActions
+            //{
                 
-            })
+            //})
             throw new NotImplementedException();
         }
     }
