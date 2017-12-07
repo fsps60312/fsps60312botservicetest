@@ -26,7 +26,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         {
             switch (message.Text)
             {
-                case "https://codingsimplifylife.blogspot.tw/":await context.PostAsync("code風景區！！！歡迎常來逛逛～～～");return true;
+                case "https://codingsimplifylife.blogspot.tw/":await context.PostAsync("code風景區！！！歡迎常來逛逛～～～你會發現，寫程式就像欣賞風景一樣快樂哦！");return true;
                 case "https://www.facebook.com/CodingSimplifyLife/posts/1995730270697235": await p1995730270697235.MessageReceivedAsync(context, argument,message); return true;
                 case "https://codingsimplifylife.blogspot.tw/2016/04/c.html":await context.PostAsync("給新手的C++教學！！！號稱網路上對新手最友善的C++教學，歡迎推薦給親朋好友，或提供改善建議哦！");return true;
                 default:
