@@ -150,7 +150,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         }
         string ConvertMessageText(string msg)
         {
-            msg = msg.Replace("？", "?");
+            msg = msg.Replace("？", "?").Replace("什麼","甚麼");
             return Mapping.Mapper.Map(msg);
         }
         void SetLastUserMessage(string userId, string message)
