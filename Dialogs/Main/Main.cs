@@ -44,16 +44,14 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
                     switch (messageText)
                     {
+                        case "傳一則貼文的網址(?)": await context.PostAsync("吼～不是真的要你說這句話啦！<br/>是你要傳一則貼文的網址給我～><"); break;
+                        case "說話": await context.PostAsync("話"); break;
                         case "我要說甚麼?":
                             {
                                 var commands = Constants.Commands.ListCommands();
                                 await context.PostAsync($"你可以說說看：{commands[Rand.Next(commands.Count)]}");
                             }
                             break;
-                        case "傳一則貼文的網址(?)":
-                            {
-                                await context.PostAsync("吼～不是真的要你說這句話啦！<br/>是你要傳一則貼文的網址給我～><");
-                            }break;
                         case Constants.Commands.C2:
                             {
                                 switch (messageRepeatCount)
