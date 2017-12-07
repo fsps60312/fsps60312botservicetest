@@ -39,11 +39,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             }
                             else if(message.Text.StartsWith("https://codingsimplifylife.blogspot.tw/"))
                             {
-                                await context.PostAsync("這是「code風景區」的連結，不是「Code風景區」的連結哦(?)XDD");
+                                await context.PostAsync("這是「code風景區」的連結，不是「Code風景區」的連結哦XDD");
                             }
                             else
                             {
-                                await context.PostAsync("偷偷告訴你，以後傳某些連結給我（特別是Code風景區某些文章的連結）會有特殊反應哦！敬請期待！>///<");
+                                await context.PostAsync("偷偷告訴你，以後傳某些連結（連結=網址）給我（特別是Code風景區某些文章的連結）會有特殊反應哦！敬請期待！>///<");
                             }
                             return true;
                         }
