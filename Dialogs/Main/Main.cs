@@ -54,7 +54,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 break;
                             case Constants.Commands.C1:
                                 {
-                                    await context.PostAsync("\\幹話排行榜/ <(_ _)>");
+                                    await context.PostAsync(System.Net.WebUtility.HtmlEncode("\\幹話排行榜/ <(_ _)>"));
+                                    if (ganTalkBoard == null) await context.PostAsync("board is null");
                                     var content = string.Join("<br/>", ganTalkBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
                                     if (content == "") content = "目前沒有資料TwT";
                                     await context.PostAsync(content);
