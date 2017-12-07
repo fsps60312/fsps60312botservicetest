@@ -16,12 +16,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
     [Serializable]
     public class P1995730270697235
     {
-        private static P1995730270697235 Instance = new P1995730270697235();
-        public static async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
-        {
-            await Instance.Main(context, argument);
-        }
-        private async Task Main(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument,IMessageActivity message)
         {
             await context.PostAsync("\u60f3\u8981\u5c0d\u7b54\u6848\u662f\u5427\uff1fXD<br/>\u597d\uff0c\u4f86\uff01\u8acb\u8f38\u5165\u60a8\u7684\u7b54\u6848\uff5e"/*想要對答案是吧？XD<br/>好，來！請輸入您的答案～*/);
             //await context.PostAsync("");

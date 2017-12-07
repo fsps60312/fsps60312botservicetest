@@ -148,6 +148,7 @@
     <Compile Include="Dialogs\Main\Main.cs" />
     <Compile Include="Dialogs\Main\MyImageCreator.cs" />
     <Compile Include="Dialogs\Main\Posts\P1995730270697235.cs" />
+    <Compile Include="Dialogs\Main\Posts\UrlReactor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
