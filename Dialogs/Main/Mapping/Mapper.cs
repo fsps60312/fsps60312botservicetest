@@ -18,6 +18,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Mapping
     {
         static Dictionary<string, string> mapping = new Dictionary<string, string>
         {
+            {"help","我要說甚麼?" },
             {"我要怎麼說點話?","我要說甚麼?" },
             {"SP 助教怎麼樣?","SP助教怎麼樣?" }
         };

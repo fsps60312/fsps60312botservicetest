@@ -31,12 +31,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 //LastUserMessageData lastUserMessageData = null;
                 if (message.Text == null)
                 {
-                    if (Rand.NextDouble() < 0.5)
-                    {
-                        await context.PostAsync("\u543c\uff5e\u90fd\u9019\u6a23\uff0c\u4e0d\u8aaa\u9ede\u8a71\u55ce\uff1f><"/*吼～都這樣，不說點話嗎？><*/);
-                    }
+                    await context.PostAsync("\u543c\uff5e\u90fd\u9019\u6a23\uff0c\u4e0d\u8aaa\u9ede\u8a71\u55ce\uff1f><"/*吼～都這樣，不說點話嗎？><*/);
                 }
-                else if(message.Text.Length>250)
+                else if (message.Text.Length > 250)
                 {
                     await context.PostAsync("???");
                 }
@@ -50,7 +47,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         case Constants.Commands.C1:
                             {
                                 await context.PostAsync($"你可以試著說說看這些話：<br/>{string.Join("<br/>", Constants.Commands.ListCommands())}");
-                            }break;
+                            }
+                            break;
                         case Constants.Commands.C2:
                             {
                                 switch (messageRepeatCount)
@@ -93,9 +91,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                             {
                                 switch (messageRepeatCount)
                                 {
-                                    case 0: await context.PostAsync("\u9019\u662f\u79d8\u5bc6>///<"/*這是秘密>///<*/); break;
-                                    case 1: await context.PostAsync("\u4e0d\u8981\u518d\u554f\u4e86\uff0c\u9019\u662f\u79d8\u5bc6\uff01"/*不要再問了，這是秘密！*/); break;
-                                    case 2: await context.PostAsync("\u5c31\u8aaa\u9019\u662f\u79d8\u5bc6\u4e86\uff0c\u518d\u554f\u4e0b\u53bb\u6211\u6703\u5d29\u6f70\u5566><"/*就說這是秘密了，再問下去我會崩潰啦><*/); break;
+                                    case 0: await context.PostAsync("這是秘密>///<"); break;
+                                    case 1: await context.PostAsync("不要再問了，這是秘密！"); break;
+                                    case 2: await context.PostAsync("就說這是秘密了，再問下去我崩潰給你看哦><"); break;
                                     case 3: throw new NotImplementedException();
                                 }
                             }
