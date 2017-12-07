@@ -28,11 +28,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             try
             {
                 var message = await argument;
-                var messageRepeatCount = GetRepeatCount(message.From.Id, message.Text);
+                var messageText =ConvertMessageText( message.Text);
+                var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
                 //LastUserMessageData lastUserMessageData = null;
-                switch (message.Text)
+                switch (messageText)
                 {
-                    case "SP助教怎麼樣？":
+                    case "SP\u52a9\u6559\u600e\u9ebc\u6a23?"/*SP助教怎麼樣?*/:
                         {
                             switch (messageRepeatCount)
                             {
@@ -69,12 +70,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         {
                             await Posts.P1995730270697235.MessageReceivedAsync(context, argument);
                         }break;
-                    case "\u4f60\u5c0d\u6211\u4e86\u89e3\u591a\u5c11\uff1f"/*你對我了解多少？*/:
+                    case "\u4f60\u5c0d\u6211\u4e86\u89e3\u591a\u5c11?"/*你對我了解多少?*/:
                         {
                             await context.PostAsync(/*↓我知道你的資訊有這麼多↓*/$"\u2193\u6211\u77e5\u9053\u4f60\u7684\u8cc7\u8a0a\u6709\u9019\u9ebc\u591a\u2193<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
                         }
                         break;
-                    case "\u4f60\u662f\u8ab0\uff1f"/*你是誰？*/:
+                    case "\u4f60\u662f\u8ab0?"/*你是誰?*/:
                         {
                             switch (messageRepeatCount)
                             {
@@ -87,7 +88,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     default:
                         {
                             //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
-                            string msg = message.Text;
+                            string msg = messageText;
                             switch((int)(Rand.NextDouble()*10))
                             {
                                 case 0: break;
@@ -103,7 +104,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 }
                 //StringBuilder sb = new StringBuilder();
                 //foreach (var v in context.UserData as System.Collections.IEnumerable) sb.Append(v);
-                SetLastUserMessage(message.From.Id, message.Text);
+                SetLastUserMessage(message.From.Id, messageText);
             }
             catch (Exception error)
             {
@@ -134,6 +135,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             if (LastUserMessage.ContainsKey(userId)) return LastUserMessage[userId];
             return null;
+        }
+        string ConvertMessageText(string msg)
+        {
+            msg = msg.Replace("？", "?").ToUpper();
+            return msg;
         }
         void SetLastUserMessage(string userId, string message)
         {
