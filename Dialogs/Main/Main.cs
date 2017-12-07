@@ -150,9 +150,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             if (LastUserMessage.ContainsKey(userId)) return LastUserMessage[userId];
             return null;
         }
+        string RemoveDuplicatedSpaces(string msg)
+        {
+            string ans = "";
+            for (int i = 0; i < msg.Length; i++) if (!(i > 0 && msg[i] == ' ' && msg[i - 1] == ' ')) ans += msg[i];
+            return ans;
+        }
         string ConvertMessageText(string msg)
         {
-            msg = msg.Replace("？", "?").Replace("什麼","甚麼").TrimEnd('?');
+            msg = msg.Replace("？", "?").Replace("什麼","甚麼").Replace('喔','哦').Replace('\t',' ').TrimEnd(new char[]{ '?',' '}).TrimStart(' ');
+            msg = RemoveDuplicatedSpaces(msg);
             return Mapping.Mapper.Map(msg);
         }
         void SetLastUserMessage(string userId, string message)
