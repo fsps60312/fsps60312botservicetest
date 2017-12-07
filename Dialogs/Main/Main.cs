@@ -54,6 +54,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 break;
                             case Constants.Commands.C1:
                                 {
+                                    if(ganTalkBoard==null)ganTalkBoard=new GanTalkBoard();
                                     var content = string.Join("<br/>", ganTalkBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
                                     if (content == "") content = "目前沒有資料TwT";
                                     await context.PostAsync("\\幹話排行榜/ <(\\_ \\_)><br/>2人以上才會上榜哦！<br/>" + content);
@@ -112,6 +113,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 {
                                     //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
                                     string msg = message.Text;
+                                    if(ganTalkBoard==null)ganTalkBoard=new GanTalkBoard();
                                     ganTalkBoard.Update(message.From.Id, msg);
                                     switch ((int)(Rand.NextDouble() * 6))
                                     {
