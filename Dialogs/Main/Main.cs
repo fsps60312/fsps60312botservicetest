@@ -36,14 +36,18 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         await context.PostAsync("\u543c\uff5e\u90fd\u9019\u6a23\uff0c\u4e0d\u8aaa\u9ede\u8a71\u55ce\uff1f><"/*吼～都這樣，不說點話嗎？><*/);
                     }
                 }
-                else if (!await Posts.UrlReactor.ReactAsync(context, argument, message)) { }
+                else if (await Posts.UrlReactor.ReactAsync(context, argument, message)) { }
                 else
                 {
                     var messageText = ConvertMessageText(message.Text);
                     var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
                     switch (messageText)
                     {
-                        case "SP\u52a9\u6559\u600e\u9ebc\u6a23?"/*SP助教怎麼樣?*/:
+                        case Constants.Commands.C1:
+                            {
+                                await context.PostAsync($"你可以試著說說看這些話：<br/>{string.Join("<br/>", Constants.Commands.ListCommands())}");
+                            }break;
+                        case Constants.Commands.C2:
                             {
                                 switch (messageRepeatCount)
                                 {
@@ -76,12 +80,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 }
                             }
                             break;
-                        case "\u4f60\u5c0d\u6211\u4e86\u89e3\u591a\u5c11?"/*你對我了解多少?*/:
+                        case Constants.Commands.C3:
                             {
                                 await context.PostAsync(/*↓我知道你的資訊有這麼多↓*/$"\u2193\u6211\u77e5\u9053\u4f60\u7684\u8cc7\u8a0a\u6709\u9019\u9ebc\u591a\u2193<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
                             }
                             break;
-                        case "\u4f60\u662f\u8ab0?"/*你是誰?*/:
+                        case Constants.Commands.C4:
                             {
                                 switch (messageRepeatCount)
                                 {
@@ -95,7 +99,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         default:
                             {
                                 //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
-                                string msg = messageText;
+                                string msg = message.Text;
                                 switch ((int)(Rand.NextDouble() * 10))
                                 {
                                     case 0: break;
@@ -145,7 +149,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         string ConvertMessageText(string msg)
         {
             msg = msg.Replace("？", "?");
-            return msg;
+            return Mapping.Mapper.Map(msg);
         }
         void SetLastUserMessage(string userId, string message)
         {
