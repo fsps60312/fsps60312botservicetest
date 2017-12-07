@@ -138,7 +138,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         }
         string ConvertMessageText(string msg)
         {
-            msg = msg.Replace("？", "?").ToUpper();
+            msg = msg.Replace("？", "?");
             return msg;
         }
         void SetLastUserMessage(string userId, string message)
