@@ -104,7 +104,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                             {
                                 //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
                                 string msg = message.Text;
-                                switch ((int)(Rand.NextDouble() * 10))
+                                switch ((int)(Rand.NextDouble() * 6))
                                 {
                                     case 0: break;
                                     case 1: msg = "\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + msg + "\u300d"/*」*/; break;
