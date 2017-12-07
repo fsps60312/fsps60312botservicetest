@@ -20,7 +20,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             Func<string, Task> YouFoundABug = new Func<string, Task>(async (bug) =>
             {
                 await context.PostAsync("\u543c\uff5e\u88ab\u4f60\u627e\u5230bug\u60f9\u5566><"/*吼～被你找到bug惹啦><*/);
+                await Task.Delay(2000);
                 await context.PostAsync("\u70ba\u4e86\u5831\u5fa9\u4f60\uff0c\u6211\u8981\u53eb\u4f60\u5e6b\u6211debug\u54c8\u54c8\u54c8OwO"/*為了報復你，我要叫你幫我debug哈哈哈OwO*/);
+                await Task.Delay(3000);
                 await context.PostAsync(bug);
             });
             try
@@ -68,8 +70,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         break;
                     case "https://www.facebook.com/CodingSimplifyLife/posts/1995730270697235":
                         {
-                            throw new NotImplementedException();
-                        }
+                            await Posts.P1995730270697235.MessageReceivedAsync(context, argument);
+                        }break;
                     case "\u4f60\u5c0d\u6211\u4e86\u89e3\u591a\u5c11\uff1f"/*你對我了解多少？*/:
                         {
                             await context.PostAsync(/*↓我知道你的資訊有這麼多↓*/$"\u2193\u6211\u77e5\u9053\u4f60\u7684\u8cc7\u8a0a\u6709\u9019\u9ebc\u591a\u2193<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
@@ -77,7 +79,18 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         break;
                     default:
                         {
-                            await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
+                            //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
+                            string msg = message.Text;
+                            switch(Math.Floor(Rand.NextDouble()*6))
+                            {
+                                case 0: break;
+                                case 1:msg = "\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + msg + "\u300d"/*」*/;break;
+                                case 2: msg = "\u597d\u5566\uff0c"/*好啦，*/+ msg; break;
+                                case 3: msg = msg + " XDD"; break;
+                                case 4: msg = msg + " www"; break;
+                                case 5: msg = msg + " ^_^"; break;
+                            }
+                            await context.PostAsync(msg);
                         }
                         break;
                 }
