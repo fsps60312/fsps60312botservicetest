@@ -23,7 +23,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             public static List<string> ListCommands()
             {
                 var info = typeof(Commands).GetFields();
-                return info.Select((f) => f.Name).ToList();
+                return info.Select((f) => (string)f.GetValue(null)).ToList();
             }
             public const string
                 C1 = "\u6211\u8981\u8aaa\u751a\u9ebc?"/*我要說甚麼?*/,
