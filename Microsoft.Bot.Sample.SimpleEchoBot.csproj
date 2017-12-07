@@ -146,6 +146,7 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\EchoDialog.cs" />
     <Compile Include="Dialogs\Main\Constants.cs" />
+    <Compile Include="Dialogs\Main\Gossiper.cs" />
     <Compile Include="Dialogs\Main\Main.cs" />
     <Compile Include="Dialogs\Main\Mapping\Mapper.cs" />
     <Compile Include="Dialogs\Main\MyImageCreator.cs" />

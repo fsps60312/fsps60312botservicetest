@@ -42,15 +42,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 {
                     var messageText = ConvertMessageText(message.Text);
                     var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
-                    switch (messageText)
+                    if(await Gossiper.ReactAsync(context, argument, messageText)) { }
+                    else switch (messageText)
                     {
-                        case "code風景區":
-                        case "Code風景區": await context.PostAsync("很棒的名字，不覺得嗎？XD<br/>然後，我的英文名字是「code scenic」哦，Google看看！<br/>總之，像欣賞風景一樣快樂的探索程式之美吧！"); break;
-                        case "傳一則貼文的網址(?)": await context.PostAsync("吼～不是真的要你說這句話啦！<br/>是你要傳一則貼文的網址給我～><"); break;
-                        case "說話": await context.PostAsync("話"); break;
-                        case "借我錢": await context.PostAsync("我沒錢><"); break;
-                        case "不要": await context.PostAsync("好吧，你壞壞 :p"); break;
-                        case "對":await context.PostAsync("沒錯，就是這樣！😎");break;
                         case "我要說甚麼":
                             {
                                 var commands = Constants.Commands.ListCommands();
