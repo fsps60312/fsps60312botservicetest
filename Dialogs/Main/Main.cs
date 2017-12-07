@@ -55,11 +55,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                             case Constants.Commands.C1:
                                 {
                                     await context.PostAsync(System.Net.WebUtility.HtmlEncode("\\幹話排行榜/ <(_ _)>"));
-                                    if (ganTalkBoard == null)
-                                    {
-                                        await context.PostAsync("board is null");
-                                        ganTalkBoard = new GanTalkBoard();
-                                    }
                                     var content = string.Join("<br/>", ganTalkBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
                                     if (content == "") content = "目前沒有資料TwT";
                                     await context.PostAsync(content);
