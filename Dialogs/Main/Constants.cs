@@ -26,9 +26,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 return info.Select((f) => (string)f.GetValue(null)).ToList();
             }
             public const string
-                C2 = "SP助教怎麼樣?",
-                C3 = "你對我了解多少?",
-                C4 = "你是誰?",
+                C2 = "SP助教怎麼樣",
+                C3 = "你對我了解多少",
+                C4 = "你是誰",
                 Curl= "傳一則貼文的網址(?)";
         }
     }
