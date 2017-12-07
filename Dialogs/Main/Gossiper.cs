@@ -31,7 +31,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"借我錢","我沒錢><" },
             {"不要","好吧，你壞壞 :p" },
             {"對","沒錯，就是這樣！😎" },
-            {"Bot","嘿，什麼事？ ^_^" }
+            {"Bot","嘿，什麼事？ ^_^" },
+            {"QQ","好啦，乖（拍拍" }
         };
         private async Task<bool> Main(IDialogContext context, IAwaitable<IMessageActivity> argument, string message)
         {
