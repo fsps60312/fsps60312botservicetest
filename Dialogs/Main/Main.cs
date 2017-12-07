@@ -29,7 +29,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {
                 var message = await argument;
                 //LastUserMessageData lastUserMessageData = null;
-                if (!await Posts.UrlReactor.ReactAsync(context, argument, message))
+                if (message.Text == null)
+                {
+                    if (Rand.NextDouble() < 0.5)
+                    {
+                        await context.PostAsync("\u543c\uff5e\u90fd\u9019\u6a23\uff0c\u4e0d\u8aaa\u9ede\u8a71\u55ce\uff1f><"/*吼～都這樣，不說點話嗎？><*/);
+                    }
+                }
+                else if (!await Posts.UrlReactor.ReactAsync(context, argument, message)) { }
+                else
                 {
                     var messageText = ConvertMessageText(message.Text);
                     var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
