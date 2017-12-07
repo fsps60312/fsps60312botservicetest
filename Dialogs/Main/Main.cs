@@ -129,6 +129,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             if (message == null) return;
             if (message.Length > 100) message = message.Remove(100);
             if (!LastUserMessage.ContainsKey(userId)) LastUserMessage.Add(userId, new LastUserMessageData { message = message, repeat = 1 });
+            else if (LastUserMessage[userId].message != message) LastUserMessage[userId] = new LastUserMessageData { message = message, repeat = 1 };
             else LastUserMessage[userId].repeat++;
         }
     }
