@@ -213,5 +213,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             else if (LastUserMessage[userId].message != message) LastUserMessage[userId] = new LastUserMessageData { message = message, repeat = 1 };
             else LastUserMessage[userId].repeat++;
         }
+        public Main()
+        {
+            ganTalkBoard = new GanTalkBoard();
+        }
     }
 }
