@@ -43,7 +43,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             }
                             else
                             {
-                                await context.PostAsync("偷偷告訴你，以後傳某些連結（連結=網址）給我（特別是Code風景區某些文章的連結）會有特殊反應哦！敬請期待！>///<");
+                                await context.PostAsync("偷偷告訴你，以後傳某些連結（連結=網址）給我（特別是Code風景區某些文章的連結）會有特殊反應哦！敬請期待！>///< <br/>還有，你傳的網址不是Code風景區的網址啦，拒收！><");
                             }
                             return true;
                         }
