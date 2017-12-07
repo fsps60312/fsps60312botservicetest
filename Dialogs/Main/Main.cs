@@ -49,7 +49,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         case "傳一則貼文的網址(?)": await context.PostAsync("吼～不是真的要你說這句話啦！<br/>是你要傳一則貼文的網址給我～><"); break;
                         case "說話": await context.PostAsync("話"); break;
                         case "借我錢": await context.PostAsync("我沒錢><"); break;
-                        case "不要": await context.PostAsync("好吧，你壞壞><"); break;
+                        case "不要": await context.PostAsync("好吧，你壞壞 :p"); break;
+                        case "對":await context.PostAsync("沒錯，就是這樣！😎");break;
                         case "我要說甚麼":
                             {
                                 var commands = Constants.Commands.ListCommands();
