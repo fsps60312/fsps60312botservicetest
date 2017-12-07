@@ -19,7 +19,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             Func<string, Task> YouFoundABug = new Func<string, Task>(async (bug) =>
             {
-                await context.PostAsync("\u543c\uff5e\u88ab\u4f60\u641e\u5230\u5d29\u6f70\u5566><"/*吼～被你搞到崩潰啦><*/);
+                await context.PostAsync("\u543c\uff5e\u5d29\u6f70\u5566\uff0c\u90fd\u662f\u4f60\u5bb3\u7684><"/*吼～崩潰啦，都是你害的><*/);
                 await Task.Delay(2000);
                 await context.PostAsync("\u70ba\u4e86\u5831\u5fa9\u4f60\uff0c\u6211\u8981\u53eb\u4f60\u5e6b\u6211debug\u54c7\u54c8\u54c8\u54c8OwO"/*為了報復你，我要叫你幫我debug哇哈哈哈OwO*/);
                 await Task.Delay(3000);
