@@ -33,7 +33,14 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     {
                         if (message.Text.StartsWith("http://") || message.Text.StartsWith("https://"))
                         {
-                            await context.PostAsync("\u5077\u5077\u544a\u8a34\u4f60\uff0c\u4ee5\u5f8c\u50b3\u67d0\u4e9b\u9023\u7d50\u7d66\u6211\uff08\u7279\u5225\u662fCode\u98a8\u666f\u5340\u67d0\u4e9b\u6587\u7ae0\u7684\u9023\u7d50\uff09\u6703\u6709\u7279\u6b8a\u53cd\u61c9\u54e6\uff01\u656c\u8acb\u671f\u5f85\uff01>///<"/*偷偷告訴你，以後傳某些連結給我（特別是Code風景區某些文章的連結）會有特殊反應哦！敬請期待！>///<*/);
+                            if (message.Text.StartsWith("https://www.facebook.com/CodingSimplifyLife/posts/"))
+                            {
+                                await context.PostAsync("Oops......這篇文沒有彩蛋哦～試試看別篇吧XD");
+                            }
+                            else
+                            {
+                                await context.PostAsync("偷偷告訴你，以後傳某些連結給我（特別是Code風景區某些文章的連結）會有特殊反應哦！敬請期待！>///<");
+                            }
                             return true;
                         }
                         else
