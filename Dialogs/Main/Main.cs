@@ -54,10 +54,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 break;
                             case Constants.Commands.C1:
                                 {
-                                    await context.PostAsync(System.Net.WebUtility.HtmlEncode("\\幹話排行榜/ <(_ _)>"));
                                     var content = string.Join("<br/>", ganTalkBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
                                     if (content == "") content = "目前沒有資料TwT";
-                                    await context.PostAsync(content);
+                                    await context.PostAsync("\\幹話排行榜/ <( _ _ )><br/>" + content);
                                 }
                                 break;
                             case Constants.Commands.C2:
@@ -147,6 +146,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             List<Tuple<int,string>> board = new List<Tuple<int,string>>();
             private void UpdateBoard(string msg,int cnt)
             {
+                if (cnt <= 1) return;
                 bool found = false;
                 for (int i = 0; i < board.Count; i++) if (board[i].Item2 == msg)
                     {
