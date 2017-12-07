@@ -109,7 +109,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     {
         // Azure page: https://portal.azure.com/#blade/WebsitesExtension/BotsIFrameBlade/id/%2Fsubscriptions%2Fed3b27fa-21db-4e94-8061-2d654c6b87d5%2FresourceGroups%2Ffsps60312botservicetest%2Fproviders%2FMicrosoft.Web%2Fsites%2Ffsps60312botservicetest
         // Unicode convert: https://www.ifreesite.com/unicode-ascii-ansi.htm
-        Random Rand = new Random();
+        static Random Rand = new Random();
         [Serializable]
         class LastUserMessageData
         {
