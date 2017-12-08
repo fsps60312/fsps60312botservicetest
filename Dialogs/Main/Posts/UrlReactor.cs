@@ -37,7 +37,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             {
                                 await context.PostAsync("Oops......這篇文沒有彩蛋哦～試試看別篇吧XD");
                             }
-                            else if(message.Text.StartsWith("https://codingsimplifylife.blogspot.tw/"))
+                            else if(message.Text.StartsWith("https://codingsimplifylife.blogspot."))
                             {
                                 await context.PostAsync("這是「code風景區」的連結，不是「Code風景區」的連結哦XDD");
                             }
