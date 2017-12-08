@@ -179,8 +179,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             public string message;
             public int repeat;
         }
-        Dictionary<string, LastUserMessageData> LastUserMessage = new Dictionary<string, LastUserMessageData>();
-        GanTalkBoard ganTalkBoard = new GanTalkBoard();
+        static Dictionary<string, LastUserMessageData> LastUserMessage = new Dictionary<string, LastUserMessageData>();
+        static GanTalkBoard ganTalkBoard = new GanTalkBoard();
         int GetRepeatCount(string userId,string message)
         {
             var lastUserMessageData = GetLastUserMessage(userId);
