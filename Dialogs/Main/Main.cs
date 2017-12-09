@@ -54,8 +54,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 break;
                             case Constants.Commands.C1:
                                 {
-                                    if(ganTalkBoard==null)ganTalkBoard=new GanTalkBoard();
-                                    var content = string.Join("<br/>", ganTalkBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
+                                    if(ganTalkLeaderBoard==null)ganTalkLeaderBoard=new GanTalkLeaderBoard();
+                                    var content = string.Join("<br/>", ganTalkLeaderBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
                                     if (content == "") content = "目前沒有資料TwT";
                                     await context.PostAsync("\\幹話排行榜/ <(\\_ \\_)><br/>2人以上才會上榜哦！<br/>" + content);
                                 }
@@ -113,8 +113,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 {
                                     //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
                                     string msg = message.Text;
-                                    if(ganTalkBoard==null)ganTalkBoard=new GanTalkBoard();
-                                    ganTalkBoard.Update(message.From.Id, msg);
+                                    if(ganTalkLeaderBoard==null)ganTalkLeaderBoard=new GanTalkLeaderBoard();
+                                    ganTalkLeaderBoard.Update(message.From.Id, msg);
                                     switch ((int)(Rand.NextDouble() * 6))
                                     {
                                         case 0: break;
@@ -122,7 +122,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                         case 2: msg = "好啦，" + msg; break;
                                         case 3: msg = msg + " XDD"; break;
                                         case 4: msg = msg + " www"; break;
-                                        case 5: msg = msg + " ^_^"; break;
+                                        case 5: msg = msg + " ^\\_^"; break;
                                     }
                                     await context.PostAsync(msg);
                                 }
@@ -141,7 +141,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     public partial class Main
     {
         [Serializable]
-        class GanTalkBoard
+        class GanTalkLeaderBoard
         {
             public const int BoardSize = 10;
             Dictionary<string, HashSet<string>> data = new Dictionary<string, HashSet<string>>();
@@ -180,7 +180,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             public int repeat;
         }
         static Dictionary<string, LastUserMessageData> LastUserMessage = new Dictionary<string, LastUserMessageData>();
-        static GanTalkBoard ganTalkBoard = new GanTalkBoard();
+        static GanTalkLeaderBoard ganTalkLeaderBoard = new GanTalkLeaderBoard();
         int GetRepeatCount(string userId,string message)
         {
             var lastUserMessageData = GetLastUserMessage(userId);
