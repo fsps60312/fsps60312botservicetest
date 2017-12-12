@@ -181,7 +181,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         public async Task Stage4(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            switch (message.Text)
+            switch (message.Text.ToLower())
             {
                 case "quit": await context.PostAsync("已退出"); break;
                 case "這跟code有甚麼關係？":
@@ -216,7 +216,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         public async Task Stage3(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            switch (message.Text)
+            switch (message.Text.ToLower())
             {
                 case "quit": await context.PostAsync("已退出"); break;
                 case "重新輸入":
@@ -313,7 +313,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         public async Task Stage2(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            switch(message.Text)
+            switch(message.Text.ToLower())
             {
                 case "quit": await context.PostAsync("已退出"); break;
                 default:
@@ -354,7 +354,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         public async Task Stage1(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            switch (message.Text)
+            switch (message.Text.ToLower())
             {
                 case "quit": await context.PostAsync("已退出"); break;
                 case "prove":
