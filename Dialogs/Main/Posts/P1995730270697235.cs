@@ -381,15 +381,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             }
             ReleaseSemaphore();
         }
-        void ReleaseSemaphore() { }// { lock (semaphore) semaphore.Release(); }
-        //System.Threading.SemaphoreSlim semaphore = new System.Threading.SemaphoreSlim(0);
+        void ReleaseSemaphore() { lock (semaphore) semaphore.Release(); }
+        System.Threading.SemaphoreSlim semaphore = new System.Threading.SemaphoreSlim(0);
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument,IMessageActivity message)
         {
             await context.PostAsync("想要對答案是吧？XD<br/>好，來！請輸入您的答案～<br/>任何時候輸入「quit」可以退出");
             await context.PostAsync("請問您要prove還是disprove呢？請輸入「prove」或「disprove」");
             context.Wait(Stage1);
+            await semaphore.WaitAsync();
             await context.PostAsync("歡迎再傳訊息給我哦！>w<");
-            //await semaphore.WaitAsync();
         }
     }
 }
