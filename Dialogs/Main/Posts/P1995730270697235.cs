@@ -183,7 +183,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text)
             {
-                case "quit": await context.PostAsync("已退出"); return;
+                case "quit": await context.PostAsync("已退出"); break;
                 case "這跟code有甚麼關係？":
                     {
                         var problemUrl = "https://ada-judge.csie.org/#!/problem/12";
@@ -204,20 +204,21 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         await Task.Delay(3000);
                         await context.PostAsync("有沒有和你找到的反例一樣呢？ ;)");
                         await context.PostAsync("-----The End-----");
-                        return;
+                        break;
                     }
                 default:
                     await context.PostAsync($"請輸入「這跟code有甚麼關係？」，您輸入的是「{message.Text}」");
                     context.Wait(Stage4);
                     return;
             }
+            ReleaseSemaphore();
         }
         public async Task Stage3(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
             switch (message.Text)
             {
-                case "quit": await context.PostAsync("已退出"); return;
+                case "quit": await context.PostAsync("已退出"); break;
                 case "重新輸入":
                     {
                         ET.Clear();
@@ -275,7 +276,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             if(!IsPlanar())
                             {
                                 await context.PostAsync("答案錯誤！您的反例不是平面圖哦，請再檢查～ ^\\_^");
-                                return;
+                                break;
                             }
                             await context.PostAsync("驗證是否無法3著色......");
                             if(CanThreeColored())
@@ -283,7 +284,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                                 await context.PostAsync("答案錯誤！您的反例其實可以3著色哦～");
                                 foreach (var p in Colors) await context.PostAsync($"「{p.Key}」塗上「{new string[3] { "紅色", "藍色", "綠色" }[p.Value]}」");
                                 await context.PostAsync("啪搭～就是這樣～");
-                                return;
+                                break;
                             }
                             await context.PostAsync("真的是一個無法3著色的平面圖耶！正在計算最大團大小，看看是不是真的<4......");
                             var clique = GetMaxCliqueForPlanar();
@@ -302,18 +303,19 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             else
                             {
                                 await context.PostAsync($"WA！答錯了！您的反例最大團大小是{clique.Count}哦～再接再勵，加油吧！");
-                                return;
+                                break;
                             }
                         }
                     }
             }
+            ReleaseSemaphore();
         }
         public async Task Stage2(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
             switch(message.Text)
             {
-                case "quit": await context.PostAsync("已退出"); return;
+                case "quit": await context.PostAsync("已退出"); break;
                 default:
                     {
                         var data = message.Text.Split(' ').Where(v => { int tmp; return int.TryParse(v, out tmp); }).ToList();
@@ -347,21 +349,22 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         }
                     }
             }
+            ReleaseSemaphore();
         }
         public async Task Stage1(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
             switch (message.Text)
             {
-                case "quit": await context.PostAsync("已退出"); return;
+                case "quit": await context.PostAsync("已退出"); break;
                 case "prove":
                     {
                         await context.PostAsync("恭喜你～");
                         await Task.Delay(5000);
                         await context.PostAsync("答錯了！！");
                         await context.PostAsync("請再想想吧～XD");
-                        return;
                     }
+                    break;
                 case "disprove":
                     {
                         await context.PostAsync("咦，想必您是想到反例囉？請給我看看您想到甚麼反例吧～");
@@ -376,13 +379,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         return;
                     }
             }
+            ReleaseSemaphore();
         }
+        void ReleaseSemaphore() { lock (semaphore) semaphore.Release(); }
+        System.Threading.SemaphoreSlim semaphore = new System.Threading.SemaphoreSlim(0);
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument,IMessageActivity message)
         {
             await context.PostAsync("想要對答案是吧？XD<br/>好，來！請輸入您的答案～<br/>任何時候輸入「quit」可以退出");
             await context.PostAsync("請問您要prove還是disprove呢？請輸入「prove」或「disprove」");
             context.Wait(Stage1);
-            throw new NotImplementedException();
+            await semaphore.WaitAsync();
         }
     }
 }
