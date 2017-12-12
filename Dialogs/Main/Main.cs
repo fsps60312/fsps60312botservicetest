@@ -84,7 +84,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                                     case 5: await context.PostAsync("壞透了，真的壞透了！><"); break;
                                                     case 6: await context.PostAsync("生氣氣啦><"); break;
                                                     case 7: await context.PostAsync("沒了，你還要我說甚麼？"); break;
-                                                    case 8: await context.PostAsync("好啦其實助教人也滿好的，也很厲害，甚麼問題都可以很快回答得出來～"); break;
+                                                    case 8: await context.PostAsync("好啦其實助教人也滿厲害的，甚麼問題都可以很快回答得出來～"); break;
                                                     case 9: await context.PostAsync("而且作業也是很好玩、可以學到很多東西！只是呢......"); break;
                                                     default: await YouFoundABug($"messageRepeatCount: {messageRepeatCount}"); break;
                                                 }
@@ -192,13 +192,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             if (LastUserMessage.ContainsKey(userId)) return LastUserMessage[userId];
             return null;
         }
-        string RemoveDuplicatedSpaces(string msg)
+        public static string RemoveDuplicatedSpaces(string msg)
         {
             string ans = "";
             for (int i = 0; i < msg.Length; i++) if (!(i > 0 && msg[i] == ' ' && msg[i - 1] == ' ')) ans += msg[i];
             return ans;
         }
-        string ConvertMessageText(string msg)
+        public static string ConvertMessageText(string msg)
         {
             msg = msg.Replace("？", "?").Replace("什麼","甚麼").Replace("神麼","甚麼").Replace('喔','哦').Replace('\t',' ').TrimEnd(new char[]{ '?',' '}).TrimStart(' ');
             msg = RemoveDuplicatedSpaces(msg);
