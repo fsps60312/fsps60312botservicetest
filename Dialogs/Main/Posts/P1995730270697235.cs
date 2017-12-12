@@ -316,7 +316,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                 case "quit": await context.PostAsync("已退出"); return;
                 default:
                     {
-                        var data = message.Text.Split(' ').Where((v) => { return int.TryParse(v, out int tmp); }).ToList();
+                        var data = message.Text.Split(' ').Where(v => { int tmp; return int.TryParse(v, out tmp); }).ToList();
                         if (data.Count != 2)
                         {
                             await context.PostAsync($"請輸入2個數字，您輸入了{data.Count}個");
