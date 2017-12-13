@@ -15,12 +15,22 @@ using System.Linq;
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
     [Serializable]
-    public class Gossiper
+    public class Gossiper: MyDialog<IMessageActivity>
     {
-        private static Gossiper Instance = new Gossiper();
-        public static async Task<bool> ReactAsync(IDialogContext context, IAwaitable<IMessageActivity> argument, string message)
+        protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
-            return await Instance.Main(context, argument, message);
+            var message = await argument;
+            try
+            {
+                var messageText = Main.GetConvertedMessageText(message);
+                messageText = MapMessage(messageText);
+                if (gossips.ContainsKey(messageText))
+                {
+                    await context.PostAsync(gossips[messageText]);
+                    Main.MarkContextCompleted(message);
+                }
+            }
+            finally { context.Done(message); }
         }
         Dictionary<string, string> gossips = new Dictionary<string, string>
         {
@@ -47,16 +57,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             message = message.ToLower();
             while (mappings.ContainsKey(message)) message = mappings[message];
             return message;
-        }
-        private async Task<bool> Main(IDialogContext context, IAwaitable<IMessageActivity> argument, string message)
-        {
-            message = MapMessage(message);
-            if (gossips.ContainsKey(message))
-            {
-                await context.PostAsync(gossips[message]);
-                return true;
-            }
-            else return false;
         }
     }
 }

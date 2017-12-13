@@ -15,7 +15,7 @@ using System.Linq;
 namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
 {
     [Serializable]
-    public class P1995730270697235
+    public class P1995730270697235:MyDialog<IMessageActivity>
     {
         [Serializable]
         class Graph
@@ -126,9 +126,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             }
             public List<int>GetMaxCliqueForPlanar()
             {
-                for (int a = 0; a < N; a++) for (int b = 0; b < N; b++) for (int c = 0; c < N; c++) for (int d = 0; d < N; d++) if (IsSubclique(new List<int> { a, b, c, d })) return new List<int> { a, b, c, d };
-                for (int a = 0; a < N; a++) for (int b = 0; b < N; b++) for (int c = 0; c < N; c++) if (IsSubclique(new List<int> { a, b, c })) return new List<int> { a, b, c };
-                for (int a = 0; a < N; a++) for (int b = 0; b < N; b++) if (IsSubclique(new List<int> { a, b })) return new List<int> { a, b };
+                for (int a = 0; a < N; a++) for (int b = a + 1; b < N; b++) for (int c = b + 1; c < N; c++) for (int d = c+1; d < N; d++) if (IsSubclique(new List<int> { a, b, c, d })) return new List<int> { a, b, c, d };
+                for (int a = 0; a < N; a++) for (int b = a + 1; b < N; b++) for (int c = b + 1; c < N; c++) if (IsSubclique(new List<int> { a, b, c })) return new List<int> { a, b, c };
+                for (int a = 0; a < N; a++) for (int b = a + 1; b < N; b++) if (IsSubclique(new List<int> { a, b })) return new List<int> { a, b };
                 for (int a = 0; a < N; a++) if (IsSubclique(new List<int> { a })) return new List<int> { a };
                 return new List<int>();
             }
@@ -204,6 +204,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         await Task.Delay(3000);
                         await context.PostAsync("有沒有和你找到的反例一樣呢？ ;)");
                         await context.PostAsync("-----The End-----");
+                        await Task.Delay(1000);
+                        await context.PostAsync("歡迎再傳訊息給我哦！>w<");
                         break;
                     }
                 default:
@@ -211,7 +213,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     context.Wait(Stage4);
                     return;
             }
-            ReleaseSemaphore();
+            ReleaseSemaphore(context, message);
         }
         public async Task Stage3(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -308,7 +310,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         }
                     }
             }
-            ReleaseSemaphore();
+            ReleaseSemaphore(context, message);
         }
         public async Task Stage2(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -349,7 +351,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         }
                     }
             }
-            ReleaseSemaphore();
+            ReleaseSemaphore(context, message);
         }
         public async Task Stage1(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -379,17 +381,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         return;
                     }
             }
-            ReleaseSemaphore();
+            ReleaseSemaphore(context, message);
         }
-        void ReleaseSemaphore() { lock (semaphore) semaphore.Release(); }
-        System.Threading.SemaphoreSlim semaphore = new System.Threading.SemaphoreSlim(0);
-        public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument,IMessageActivity message)
+        void ReleaseSemaphore(IDialogContext context, IMessageActivity message) { Main.MarkContextCompleted(message);context.Done(message); }
+        protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
+            var message = await argument;
             await context.PostAsync("想要對答案是吧？XD<br/>好，來！請輸入您的答案～<br/>任何時候輸入「quit」可以退出");
             await context.PostAsync("請問您要prove還是disprove呢？請輸入「prove」或「disprove」");
             context.Wait(Stage1);
-            await semaphore.WaitAsync();
-            await context.PostAsync("歡迎再傳訊息給我哦！>w<");
         }
     }
 }

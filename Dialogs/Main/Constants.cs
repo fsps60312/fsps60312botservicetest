@@ -32,5 +32,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 C4 = "你是誰",
                 Curl = "傳一則貼文的網址(?)";
         }
+        public static string IsContextWaited = "IsContextWaited";
+        public static string IsContextCompleted = "IsContextCompleted";
+        public static string ConvertedMessageText = "ConvertedMessageText";
     }
 }

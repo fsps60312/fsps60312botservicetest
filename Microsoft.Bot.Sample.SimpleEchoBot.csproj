@@ -145,13 +145,16 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\EchoDialog.cs" />
+    <Compile Include="Dialogs\Main\BasicJudge.cs" />
     <Compile Include="Dialogs\Main\Constants.cs" />
+    <Compile Include="Dialogs\Main\FinalJudge.cs" />
     <Compile Include="Dialogs\Main\Gossiper.cs" />
     <Compile Include="Dialogs\Main\Main.cs" />
     <Compile Include="Dialogs\Main\Mapping\Mapper.cs" />
     <Compile Include="Dialogs\Main\MyImageCreator.cs" />
     <Compile Include="Dialogs\Main\Posts\P1995730270697235.cs" />
     <Compile Include="Dialogs\Main\Posts\UrlReactor.cs" />
+    <Compile Include="Dialogs\MyDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
