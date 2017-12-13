@@ -190,7 +190,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text.ToLower())
             {
-                case "quit": await context.PostAsync("掰掰～小心回家不要被壞人抓走XDD"); break;
+                case "quit": await context.PostAsync("掰掰～小心回家不要被壞人抓走哦XDD"); break;
                 case "這跟code有甚麼關係？":
                     {
                         var problemUrl = "https://ada-judge.csie.org/#!/problem/12";
