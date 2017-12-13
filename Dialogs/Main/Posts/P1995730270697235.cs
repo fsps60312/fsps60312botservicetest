@@ -144,7 +144,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             Dictionary<string, int> idx = new Dictionary<string, int>();
             int i = 0;
             foreach (var p in ET) idx[p.Key] = i++;
-            return new Graph(N, M, ET.Select(v1 => new HashSet<int>(v1.Value.Select(v2 => idx[v2]))).ToList());
+            return new Graph(ET.Count, M, ET.Select(v1 => new HashSet<int>(v1.Value.Select(v2 => idx[v2]))).ToList());
         }
         bool IsPlanar() { return BuildGraph().IsPlanar(); }
         Dictionary<string, int> Colors = null;
@@ -236,18 +236,32 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         context.Wait(Stage3);
                         return;
                     }
+                case "重新輸入n和m":
+                    {
+                        ET.Clear();
+                        await context.PostAsync("請重新輸入您的N和M：");
+                        context.Wait(Stage2);
+                        return;
+                    }
                 default:
                     {
                         var data = message.Text.Split(' ').Where((v) => !string.IsNullOrWhiteSpace(v)).ToList();
                         if (data.Count % 2 == 1)
                         {
-                            await context.PostAsync($"您輸入了奇數 ({data.Count}) 個點，但正常來講不管幾條邊都會有偶數個點耶（每條邊2個點），要不要再檢查看看您的輸入呢？><（輸入「重新輸入」來重新輸入這M={M}條邊）");
+                            await context.PostAsync($"您輸入了奇數 ({data.Count}) 個點，但正常來講不管幾條邊都會有偶數個點耶（每條邊2個點），要不要再檢查看看您的輸入呢？><<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
                             context.Wait(Stage3);
                             return;
                         }
                         if (data.Count / 2 > EdgeRemain)
                         {
-                            await context.PostAsync($"您輸入太多邊了，之前您已經輸入了{M - EdgeRemain}條邊，因此只剩{EdgeRemain}條邊可以輸入哦！（輸入「重新輸入」來重新輸入這M={M}條邊）");
+                            await context.PostAsync($"您輸入太多邊了，之前您已經輸入了{M - EdgeRemain}條邊，因此只剩{EdgeRemain}條邊可以輸入哦！<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
+                            context.Wait(Stage3);
+                            return;
+                        }
+                        int countAfterInserting = ET.Select(p => p.Key).Union(data).Count();
+                        if (countAfterInserting > N)
+                        {
+                            await context.PostAsync($"若將您目前輸入的{data.Count / 2}條邊加進去，就會有{countAfterInserting}個點，但您一開始說總共有N={N}個點，是不是哪裡出錯了呢？<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
                             context.Wait(Stage3);
                             return;
                         }
@@ -258,15 +272,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             if (!ET.ContainsKey(data[i + 1])) ET.Add(data[i + 1], new HashSet<string>());
                             ET[data[i]].Add(data[i + 1]);
                             ET[data[i + 1]].Add(data[i]);
-                        }
-                        if(ET.Count>N)
-                        {
-                            await context.PostAsync($"您目前輸入的邊已經包含了{ET.Count}個點，但您一開始說總共有N={N}個點，是不是哪裡出錯了呢？請重新輸入這M={M}條邊吧～");
-                            ET.Clear();
-                            EdgeRemain = M;
-                            await context.PostAsync($"請重新輸入您的M={M}條邊：");
-                            context.Wait(Stage3);
-                            return;
                         }
                         {
                             var sb = new StringBuilder();
@@ -374,14 +379,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             }
                             else if(M==0)
                             {
-                                await context.PostAsync("0條邊？！你在開玩笑吧？沒有邊的圖連1著色都可以了！你給我重新輸入！");
+                                await context.PostAsync("0條邊？！你在開玩笑吧？沒有邊的圖連「1著色」都可以了！你給我重新輸入！");
                                 context.Wait(Stage2);
                                 return;
                             }
                             else
                             {
 
-                                await context.PostAsync($"現在請輸入M={M}條邊，每條邊由兩個點表示，例如：「A B」代表有一條邊從A連到B（也是從B連到A），「A B B C」代表有兩條邊AB和BC，現在，請輸入您反例中的M條邊：（輸入「重新輸入」來重新輸入這M={M}條邊）");
+                                await context.PostAsync($"現在請輸入M={M}條邊，每條邊由兩個點表示，例如：「A B」代表有一條邊從A連到B（也是從B連到A），「A B B C」代表有兩條邊AB和BC，現在，請輸入您反例中的M條邊：<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
+                                ET.Clear();
                                 EdgeRemain = M;
                                 context.Wait(Stage3);
                                 return;
@@ -396,12 +402,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text.ToLower())
             {
-                case "quit": await context.PostAsync("掰掰～歡迎隨時再傳訊息給我哦！>///<"); break;
+                case "quit": await context.PostAsync("掰掰～一定要記得下次告訴我這題的答案哦！>///<"); break;
                 case "prove":
                     {
                         await context.PostAsync("恭喜你～");
-                        await Task.Delay(5000);
+                        await Task.Delay(2000);
                         await context.PostAsync("答錯了！！");
+                        await Task.Delay(1000);
                         await context.PostAsync("請再想想吧～XD");
                     }
                     break;
@@ -421,13 +428,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             }
             ReleaseSemaphore(context, message);
         }
-        void ReleaseSemaphore(IDialogContext context, IMessageActivity message) { Main.MarkContextCompleted(message);context.Done(message); }
+        void ReleaseSemaphore(IDialogContext context, IMessageActivity message) { Main.MarkContextCompleted(message); context.Done(message); }
+        public async Task Stage0(IDialogContext context, IAwaitable<string> argument)
+        {
+            await Stage1(context, Awaitable.FromItem(new Activity { Text = await argument, From = new ChannelAccount() }));
+        }
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
             await context.PostAsync("想要對答案是吧？XD<br/>好，來！請輸入您的答案～<br/>任何時候輸入「quit」可以退出");
-            await context.PostAsync("請問您要prove還是disprove呢？請輸入「prove」或「disprove」");
-            context.Wait(Stage1);
+            PromptDialog.Choice(context, Stage0, new List<string> { "Prove", "Disprove", "Quit" }, "請問您要prove還是disprove呢？", "請輸入「prove」或「disprove」");
         }
     }
 }
