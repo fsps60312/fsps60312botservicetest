@@ -148,7 +148,14 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         }
         bool IsPlanar() { return BuildGraph().IsPlanar(); }
         Dictionary<string, int> Colors = null;
-        bool CanThreeColored() { return BuildGraph().CanThreeColored(); }
+        bool CanThreeColored()
+        {
+            var graph = BuildGraph();
+            var ret= graph.CanThreeColored();
+            Colors=new Dictionary<string, int>();
+            foreach (var v in graph.Colors) Colors[ET.ElementAt(v).Key] = v;
+            return ret;
+        }
         List<string> GetMaxCliqueForPlanar() { return BuildGraph().GetMaxCliqueForPlanar().Select(v => ET.ElementAt(v).Key).ToList(); }
         async Task SendImage(IDialogContext context,string url)
         {
@@ -183,7 +190,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text.ToLower())
             {
-                case "quit": await context.PostAsync("已退出"); break;
+                case "quit": await context.PostAsync("掰掰～小心回家不要被壞人抓走XDD"); break;
                 case "這跟code有甚麼關係？":
                     {
                         var problemUrl = "https://ada-judge.csie.org/#!/problem/12";
@@ -220,7 +227,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text.ToLower())
             {
-                case "quit": await context.PostAsync("已退出"); break;
+                case "quit": await context.PostAsync("掰掰～歡迎隨時再傳訊息給我哦！>///<"); break;
                 case "重新輸入":
                     {
                         ET.Clear();
@@ -261,7 +268,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             context.Wait(Stage3);
                             return;
                         }
-                        for (int i = 0; i < data.Count; i += 2) await context.PostAsync($"{data[i]} ←→ {data[i + 1]}");
+                        {
+                            var sb = new StringBuilder();
+                            for (int i = 0; i < data.Count; i += 2)sb.Append($"{data[i]} ←→ {data[i + 1]}<br/>");
+                            await context.PostAsync(sb.ToString());
+                        }
                         if (EdgeRemain > 0)
                         {
                             await context.PostAsync($"您這次輸入了{data.Count / 2}條邊，請繼續輸入剩下的{EdgeRemain}條邊：");
@@ -273,25 +284,34 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             await context.PostAsync($"您這次輸入了{data.Count / 2}條邊，輸入完成！");
                             if (ET.Count == N) await context.PostAsync($"您的輸入包含了{ET.Count}個點，和N一樣！");
                             else await context.PostAsync($"警告！您的輸入包含了{ET.Count}個點，可是N={N}，不一樣！");
+                            await Task.Delay(1000);
                             await context.PostAsync("驗證您的答案中，請稍後......");
+                            await Task.Delay(1000);
                             await context.PostAsync("驗證是否為平面圖......");
+                            await Task.Delay(1000);
                             if(!IsPlanar())
                             {
                                 await context.PostAsync("答案錯誤！您的反例不是平面圖哦，請再檢查～ ^\\_^");
                                 break;
                             }
                             await context.PostAsync("驗證是否無法3著色......");
+                            await Task.Delay(1000);
                             if(CanThreeColored())
                             {
                                 await context.PostAsync("答案錯誤！您的反例其實可以3著色哦～");
-                                foreach (var p in Colors) await context.PostAsync($"「{p.Key}」塗上「{new string[3] { "紅色", "藍色", "綠色" }[p.Value]}」");
+                                await Task.Delay(3000);
+                                var sb = new StringBuilder();
+                                foreach (var p in Colors)sb.Append($"「{p.Key}」塗上「{new string[3] { "紅色", "藍色", "綠色" }[p.Value]}」<br/>");
+                                await context.PostAsync(sb.ToString());
+                                await Task.Delay(1000);
                                 await context.PostAsync("啪搭～就是這樣～");
                                 break;
                             }
                             await context.PostAsync("真的是一個無法3著色的平面圖耶！正在計算最大團大小，看看是不是真的<4......");
+                            await Task.Delay(1000);
                             var clique = GetMaxCliqueForPlanar();
                             {
-                                StringBuilder sb = new StringBuilder("其中一個最大團：");
+                                StringBuilder sb = new StringBuilder("其中一個最大團：<br/>");
                                 foreach (var v in clique) sb.Append($" {v}");
                                 await context.PostAsync(sb.ToString());
                             }
@@ -317,7 +337,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch(message.Text.ToLower())
             {
-                case "quit": await context.PostAsync("已退出"); break;
+                case "quit": await context.PostAsync("掰掰～歡迎隨時再傳訊息給我哦！>///<"); break;
                 default:
                     {
                         var data = message.Text.Split(' ').Where(v => { int tmp; return int.TryParse(v, out tmp); }).ToList();
@@ -340,6 +360,24 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                                 context.Wait(Stage2);
                                 return;
                             }
+                            else if(N<=0)
+                            {
+                                await context.PostAsync("N不能為負數或0哦！");
+                                context.Wait(Stage2);
+                                return;
+                            }
+                            else if(M<0)
+                            {
+                                await context.PostAsync("M不能為負數哦！");
+                                context.Wait(Stage2);
+                                return;
+                            }
+                            else if(M==0)
+                            {
+                                await context.PostAsync("0條邊？！你在開玩笑吧？沒有邊的圖連1著色都可以了！你給我重新輸入！");
+                                context.Wait(Stage2);
+                                return;
+                            }
                             else
                             {
 
@@ -358,7 +396,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text.ToLower())
             {
-                case "quit": await context.PostAsync("已退出"); break;
+                case "quit": await context.PostAsync("掰掰～歡迎隨時再傳訊息給我哦！>///<"); break;
                 case "prove":
                     {
                         await context.PostAsync("恭喜你～");
