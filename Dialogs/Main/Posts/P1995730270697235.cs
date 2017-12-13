@@ -153,7 +153,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var graph = BuildGraph();
             var ret= graph.CanThreeColored();
             Colors=new Dictionary<string, int>();
-            foreach (var v in graph.Colors) Colors[ET.ElementAt(v).Key] = v;
+            for (int i = 0; i < graph.Colors.Count; i++) Colors[ET.ElementAt(i).Key] = graph.Colors[i];
             return ret;
         }
         List<string> GetMaxCliqueForPlanar() { return BuildGraph().GetMaxCliqueForPlanar().Select(v => ET.ElementAt(v).Key).ToList(); }
