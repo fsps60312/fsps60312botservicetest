@@ -200,18 +200,18 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         await context.PostAsync($"題目網址：{problemUrl}");
                         await SendImage(context, statusImage);
                         await context.PostAsync("其實呢這要從台大資工大二必修課作業開始講起，這堂課叫做ADA，第三次作業中有一題線上作業叫做「Metropolitan」");
-                        await Task.Delay(7000);
+                        await Task.Delay(10000);
                         await SendImage(context, rankingImage);
                         await context.PostAsync("行健同學一時想不出好的解法，只好直接假設了「若平面圖無法3著色則最大團大小等於4」這個性質是好的，然後照這個想法寫了一份code，傳上去就AC了XDD 還在速度上得到第1名！<(\\_ \\_)>");
-                        await Task.Delay(10000);
+                        await Task.Delay(15000);
                         await context.PostAsync("於是小莫就想要幫他驗證這個性質是不是好的。殊不知，就不小心找到反例了呢！>///<");
-                        await Task.Delay(6000);
+                        await Task.Delay(9000);
                         await context.PostAsync("這是小莫當初找到的反例哦：");
                         await SendImage(context, myDisprove);
-                        await Task.Delay(3000);
+                        await Task.Delay(5000);
                         await context.PostAsync("有沒有和你找到的反例一樣呢？ ;)");
                         await context.PostAsync("-----The End-----");
-                        await Task.Delay(1000);
+                        await Task.Delay(3000);
                         await context.PostAsync("歡迎再傳訊息給我哦！>w<");
                         break;
                     }
