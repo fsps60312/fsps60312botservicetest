@@ -258,12 +258,32 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             context.Wait(Stage3);
                             return;
                         }
-                        int countAfterInserting = ET.Select(p => p.Key).Union(data).Count();
-                        if (countAfterInserting > N)
                         {
-                            await context.PostAsync($"若將您目前輸入的{data.Count / 2}條邊加進去，就會有{countAfterInserting}個點，但您一開始說總共有N={N}個點，是不是哪裡出錯了呢？<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
-                            context.Wait(Stage3);
-                            return;
+                            var sb = new StringBuilder();
+                            for (int i = 0; i < data.Count; i += 2) sb.Append($"{data[i]} ←→ {data[i + 1]}<br/>");
+                            await context.PostAsync(sb.ToString());
+                        }
+                        {
+                            int countAfterInserting = ET.Select(p => p.Key).Union(data).Count();
+                            if (countAfterInserting > N)
+                            {
+                                await context.PostAsync($"若將您目前輸入的{data.Count / 2}條邊加進去，就會有{countAfterInserting}個點，但您一開始說總共有N={N}個點，是不是哪裡出錯了呢？<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
+                                context.Wait(Stage3);
+                                return;
+                            }
+                        }
+                        {
+                            var selfLoop = new Func<string>(() =>
+                             {
+                                 for (int i = 0; i < data.Count; i += 2) if (data[i] == data[i + 1]) return data[i];
+                                 return null;
+                             })();
+                            if (selfLoop!=null)
+                            {
+                                await context.PostAsync($"不能有自環哦！自環就是兩邊都是同一個點的邊，這是您輸入中的其中一個自環：{selfLoop}");
+                                context.Wait(Stage3);
+                                return;
+                            }
                         }
                         EdgeRemain -= data.Count / 2;
                         for (int i = 0; i < data.Count; i += 2)
@@ -272,11 +292,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             if (!ET.ContainsKey(data[i + 1])) ET.Add(data[i + 1], new HashSet<string>());
                             ET[data[i]].Add(data[i + 1]);
                             ET[data[i + 1]].Add(data[i]);
-                        }
-                        {
-                            var sb = new StringBuilder();
-                            for (int i = 0; i < data.Count; i += 2)sb.Append($"{data[i]} ←→ {data[i + 1]}<br/>");
-                            await context.PostAsync(sb.ToString());
                         }
                         if (EdgeRemain > 0)
                         {
