@@ -280,7 +280,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                              })();
                             if (selfLoop!=null)
                             {
-                                await context.PostAsync($"不能有自環哦！自環就是兩邊都是同一個點的邊，這是您輸入中的其中一個自環：{selfLoop}");
+                                await context.PostAsync($"不能有自環哦！自環就是兩邊都是同一個點的邊，這是您輸入中的其中一個自環：{selfLoop} ←→ {selfLoop}");
                                 context.Wait(Stage3);
                                 return;
                             }

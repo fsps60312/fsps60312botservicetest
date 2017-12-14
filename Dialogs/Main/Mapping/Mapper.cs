@@ -25,7 +25,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Mapping
             {"我應該要說甚麼","我要說甚麼" },
             {"SP 助教怎麼樣","SP助教怎麼樣" },
             {"嗨","hi" },
-            {"你很雷耶","你好雷哦"}
+            {"你很雷耶","你好雷哦"},
+            {"QAQ","QQ" }
         };
         public static string Map(string message)
         {
