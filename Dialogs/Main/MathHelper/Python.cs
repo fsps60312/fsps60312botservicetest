@@ -109,7 +109,14 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 var pythonCode = message.Text.Substring(3);
                 await context.PostAsync($"計算中......{pythonCode}");
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
-                await Task.Run(async() => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)),new System.Threading.CancellationTokenSource(1000).Token);
+                try
+                {
+                    await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), new System.Threading.CancellationTokenSource(1000).Token);
+                }
+                catch(Exception error)
+                {
+                    await context.PostAsync($"計算時發生問題：<br/>{error}");
+                }
                 message = null;
             }
             context.Done(message);
