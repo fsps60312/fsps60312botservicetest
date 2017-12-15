@@ -20,19 +20,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            try
+            var messageText = Main.GetConvertedMessageText(message);
+            messageText = MapMessage(messageText);
+            if (gossips.ContainsKey(messageText))
             {
-                var messageText = Main.GetConvertedMessageText(message);
-                messageText = MapMessage(messageText);
-                if (gossips.ContainsKey(messageText))
-                {
-                    await context.PostAsync(gossips[messageText]);
-                    Main.MarkContextCompleted(message);
-                }
+                await context.PostAsync(gossips[messageText]);
+                message = null;
             }
-            finally { context.Done(message); }
+            context.Done(message);
         }
-        Dictionary<string, string> gossips = new Dictionary<string, string>
+        Dictionary<string, string> gossips = new Dictionary<string, string>//input must be lower case
         {
             { "code風景區", "很棒的名字，不覺得嗎？XD<br/>然後，我的英文名字是「code scenic」哦，Google看看！<br/>總之，像欣賞風景一樣快樂的探索程式之美吧！"},
             //{"Code風景區" ,"很棒的名字，不覺得嗎？XD<br/>然後，我的英文名字是「Code Scenic」哦，Google看看！<br/>總之，像欣賞風景一樣快樂的探索程式之美吧！"},

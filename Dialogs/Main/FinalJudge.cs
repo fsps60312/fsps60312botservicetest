@@ -20,97 +20,94 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            try
+            var messageText = Main.GetConvertedMessageText(message);
+            var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
+            switch (messageText)
             {
-                var messageText = Main.GetConvertedMessageText(message);
-                var messageRepeatCount = GetRepeatCount(message.From.Id, messageText);
-                switch (messageText)
-                {
-                    case "我要說甚麼":
+                case "我要說甚麼":
+                    {
+                        var commands = Constants.Commands.ListCommands();
+                        await context.PostAsync($"你可以說說看：{commands[Rand.Next(commands.Count)]}");
+                    }
+                    break;
+                case Constants.Commands.C1:
+                    {
+                        if (ganTalkLeaderBoard == null) ganTalkLeaderBoard = new GanTalkLeaderBoard();
+                        var content = string.Join("<br/>", ganTalkLeaderBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
+                        if (content == "") content = "目前沒有資料TwT";
+                        await context.PostAsync("\\幹話排行榜/ <(\\_ \\_)><br/>2人以上才會上榜哦！<br/>" + content);
+                    }
+                    break;
+                case Constants.Commands.C2:
+                    {
+                        switch (messageRepeatCount)
                         {
-                            var commands = Constants.Commands.ListCommands();
-                            await context.PostAsync($"你可以說說看：{commands[Rand.Next(commands.Count)]}");
-                        }
-                        break;
-                    case Constants.Commands.C1:
-                        {
-                            if (ganTalkLeaderBoard == null) ganTalkLeaderBoard = new GanTalkLeaderBoard();
-                            var content = string.Join("<br/>", ganTalkLeaderBoard.GetBoard().Select(v => $"{v.Item2}人說了：{v.Item1}"));
-                            if (content == "") content = "目前沒有資料TwT";
-                            await context.PostAsync("\\幹話排行榜/ <(\\_ \\_)><br/>2人以上才會上榜哦！<br/>" + content);
-                        }
-                        break;
-                    case Constants.Commands.C2:
-                        {
-                            switch (messageRepeatCount)
-                            {
-                                case 0: await context.PostAsync("不好說，這真的不好說"); break;
-                                case 1: await context.PostAsync("走遠了......"); break;
-                                case 2: await context.PostAsync("剩下的就不要再問了"); break;
-                                case 3: await context.PostAsync("就跟你說不要再問了！"); break;
-                                case 4: await context.PostAsync("就說不要再問了你是沒聽到嗎？"); break;
-                                case 5: await context.PostAsync("好啦好啦，我說我說"); break;
-                                case 6: await context.PostAsync("好啦我真的要說了，但是要幫我保密哦"); break;
-                                case 7: await context.PostAsync("真的要幫我保密哦！(勾小拇指"); break;
-                                default:
+                            case 0: await context.PostAsync("不好說，這真的不好說"); break;
+                            case 1: await context.PostAsync("走遠了......"); break;
+                            case 2: await context.PostAsync("剩下的就不要再問了"); break;
+                            case 3: await context.PostAsync("就跟你說不要再問了！"); break;
+                            case 4: await context.PostAsync("就說不要再問了你是沒聽到嗎？"); break;
+                            case 5: await context.PostAsync("好啦好啦，我說我說"); break;
+                            case 6: await context.PostAsync("好啦我真的要說了，但是要幫我保密哦"); break;
+                            case 7: await context.PostAsync("真的要幫我保密哦！(勾小拇指"); break;
+                            default:
+                                {
+                                    switch ((messageRepeatCount - 8) % 10)
                                     {
-                                        switch ((messageRepeatCount - 8) % 10)
-                                        {
-                                            case 0: await context.PostAsync("就是呢......"); break;
-                                            case 1: await context.PostAsync("我覺得......"); break;
-                                            case 2: await context.PostAsync("那個Spec......"); break;
-                                            case 3: await context.PostAsync("應該要一開始就寫清楚，而且......"); break;
-                                            case 4: await context.PostAsync("不要一直改啦，這樣......"); break;
-                                            case 5: await context.PostAsync("壞透了，真的壞透了！><"); break;
-                                            case 6: await context.PostAsync("生氣氣啦><"); break;
-                                            case 7: await context.PostAsync("沒了，你還要我說甚麼？"); break;
-                                            case 8: await context.PostAsync("好啦其實助教人也滿厲害的，甚麼問題都可以很快回答得出來～"); break;
-                                            case 9: await context.PostAsync("而且作業也是很好玩、可以學到很多東西！只是呢......"); break;
-                                            default: await Main.PrintBug(context, $"messageRepeatCount: {messageRepeatCount}"); break;
-                                        }
+                                        case 0: await context.PostAsync("就是呢......"); break;
+                                        case 1: await context.PostAsync("我覺得......"); break;
+                                        case 2: await context.PostAsync("那個Spec......"); break;
+                                        case 3: await context.PostAsync("應該要一開始就寫清楚，而且......"); break;
+                                        case 4: await context.PostAsync("不要一直改啦，這樣......"); break;
+                                        case 5: await context.PostAsync("壞透了，真的壞透了！><"); break;
+                                        case 6: await context.PostAsync("生氣氣啦><"); break;
+                                        case 7: await context.PostAsync("沒了，你還要我說甚麼？"); break;
+                                        case 8: await context.PostAsync("好啦其實助教人也滿厲害的，甚麼問題都可以很快回答得出來～"); break;
+                                        case 9: await context.PostAsync("而且作業也是很好玩、可以學到很多東西！只是呢......"); break;
+                                        default: await Main.PrintBug(context, $"messageRepeatCount: {messageRepeatCount}"); break;
                                     }
-                                    break;
-                            }
+                                }
+                                break;
                         }
-                        break;
-                    case Constants.Commands.C3:
+                    }
+                    break;
+                case Constants.Commands.C3:
+                    {
+                        await context.PostAsync($"↓我知道你的資訊有這麼多↓<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
+                    }
+                    break;
+                case Constants.Commands.C4:
+                    {
+                        switch (messageRepeatCount)
                         {
-                            await context.PostAsync($"↓我知道你的資訊有這麼多↓<br/>Id: {message.From.Id}<br/>" + $"Name: {message.From.Name}<br/>" + $"Properties: {message.From.Properties}");
+                            case 0: await context.PostAsync("這是秘密>///<"); break;
+                            case 1: await context.PostAsync("不要再問了，這是秘密！"); break;
+                            case 2: await context.PostAsync("就說這是秘密了，再問下去我崩潰給你看哦><"); break;
+                            case 3: throw new NotImplementedException();
                         }
-                        break;
-                    case Constants.Commands.C4:
+                    }
+                    break;
+                default:
+                    {
+                        //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
+                        string msg = message.Text;
+                        if (ganTalkLeaderBoard == null) ganTalkLeaderBoard = new GanTalkLeaderBoard();
+                        ganTalkLeaderBoard.Update(message.From.Id, msg);
+                        switch ((int)(Rand.NextDouble() * 6))
                         {
-                            switch (messageRepeatCount)
-                            {
-                                case 0: await context.PostAsync("這是秘密>///<"); break;
-                                case 1: await context.PostAsync("不要再問了，這是秘密！"); break;
-                                case 2: await context.PostAsync("就說這是秘密了，再問下去我崩潰給你看哦><"); break;
-                                case 3: throw new NotImplementedException();
-                            }
+                            case 0: break;
+                            case 1: msg = "你說了「" + msg + "」"; break;
+                            case 2: msg = "好啦，" + msg; break;
+                            case 3: msg = msg + " XDD"; break;
+                            case 4: msg = msg + " www"; break;
+                            case 5: msg = msg + " ^\\_^"; break;
                         }
-                        break;
-                    default:
-                        {
-                            //await context.PostAsync("\u4f60\u8aaa\u4e86\u300c"/*你說了「*/ + message.Text + "\u300d"/*」*/);
-                            string msg = message.Text;
-                            if (ganTalkLeaderBoard == null) ganTalkLeaderBoard = new GanTalkLeaderBoard();
-                            ganTalkLeaderBoard.Update(message.From.Id, msg);
-                            switch ((int)(Rand.NextDouble() * 6))
-                            {
-                                case 0: break;
-                                case 1: msg = "你說了「" + msg + "」"; break;
-                                case 2: msg = "好啦，" + msg; break;
-                                case 3: msg = msg + " XDD"; break;
-                                case 4: msg = msg + " www"; break;
-                                case 5: msg = msg + " ^\\_^"; break;
-                            }
-                            await context.PostAsync(msg);
-                        }
-                        break;
-                }
-                SetLastUserMessage(message.From.Id, messageText);
+                        await context.PostAsync(msg);
+                    }
+                    break;
             }
-            finally { context.Done(message); }
+            SetLastUserMessage(message.From.Id, messageText);
+            context.Done(message = null);
         }
         [Serializable]
         class GanTalkLeaderBoard

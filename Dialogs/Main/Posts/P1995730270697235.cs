@@ -217,10 +217,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     }
                 default:
                     await context.PostAsync($"請輸入「這跟code有甚麼關係？」，您輸入的是「{message.Text}」");
-                    context.Wait(Stage4);
                     return;
             }
-            ReleaseSemaphore(context, message);
+            context.Done<IMessageActivity>(null);
         }
         public async Task Stage3(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -233,7 +232,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         ET.Clear();
                         EdgeRemain = M;
                         await context.PostAsync($"請重新輸入您的M={M}條邊：");
-                        context.Wait(Stage3);
                         return;
                     }
                 case "重新輸入n和m":
@@ -249,13 +247,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         if (data.Count % 2 == 1)
                         {
                             await context.PostAsync($"您輸入了奇數 ({data.Count}) 個點，但正常來講不管幾條邊都會有偶數個點耶（每條邊2個點），要不要再檢查看看您的輸入呢？><<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
-                            context.Wait(Stage3);
                             return;
                         }
                         if (data.Count / 2 > EdgeRemain)
                         {
                             await context.PostAsync($"您輸入太多邊了，之前您已經輸入了{M - EdgeRemain}條邊，因此只剩{EdgeRemain}條邊可以輸入哦！<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
-                            context.Wait(Stage3);
                             return;
                         }
                         {
@@ -268,7 +264,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             if (countAfterInserting > N)
                             {
                                 await context.PostAsync($"若將您目前輸入的{data.Count / 2}條邊加進去，就會有{countAfterInserting}個點，但您一開始說總共有N={N}個點，是不是哪裡出錯了呢？<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");
-                                context.Wait(Stage3);
                                 return;
                             }
                         }
@@ -281,7 +276,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                             if (selfLoop!=null)
                             {
                                 await context.PostAsync($"不能有自環哦！自環就是兩邊都是同一個點的邊，這是您輸入中的其中一個自環：{selfLoop} ←→ {selfLoop}");
-                                context.Wait(Stage3);
                                 return;
                             }
                         }
@@ -296,7 +290,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         if (EdgeRemain > 0)
                         {
                             await context.PostAsync($"您這次輸入了{data.Count / 2}條邊，請繼續輸入剩下的{EdgeRemain}條邊：");
-                            context.Wait(Stage3);
                             return;
                         }
                         else
@@ -350,7 +343,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         }
                     }
             }
-            ReleaseSemaphore(context, message);
+            context.Done<IMessageActivity>(null);
         }
         public async Task Stage2(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -364,7 +357,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         if (data.Count != 2)
                         {
                             await context.PostAsync($"請輸入2個數字，您輸入了{data.Count}個");
-                            context.Wait(Stage2);
                             return;
                         }
                         else
@@ -377,25 +369,21 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                                 if (N > 10 && M <= 45) await context.PostAsync("N太大了，N的上限是10哦！");
                                 else if (N <= 10 && M > 45) await context.PostAsync("M太大了，M的上限是45哦！");
                                 else await context.PostAsync("N和M都太大了，N的上限是10、M的上限是45哦！");
-                                context.Wait(Stage2);
                                 return;
                             }
                             else if(N<=0)
                             {
                                 await context.PostAsync("N不能為負數或0哦！");
-                                context.Wait(Stage2);
                                 return;
                             }
                             else if(M<0)
                             {
                                 await context.PostAsync("M不能為負數哦！");
-                                context.Wait(Stage2);
                                 return;
                             }
                             else if(M==0)
                             {
                                 await context.PostAsync("0條邊？！你在開玩笑吧？沒有邊的圖連「1著色」都可以了！你給我重新輸入！");
-                                context.Wait(Stage2);
                                 return;
                             }
                             else
@@ -410,7 +398,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         }
                     }
             }
-            ReleaseSemaphore(context, message);
+            context.Done<IMessageActivity>(null);
         }
         public async Task AStage2(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -434,7 +422,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     try { throw new NotImplementedException(); }
                     catch (Exception error) { await Main.PrintBug(context, error.ToString()); break; }
             }
-            ReleaseSemaphore(context, message);
+            context.Done<IMessageActivity>(null);
         }
         public async Task _AStage2(IDialogContext context, IAwaitable<string> argument)
         {
@@ -457,7 +445,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     try { throw new NotImplementedException(); }
                     catch (Exception error) { await Main.PrintBug(context, error.ToString()); break; }
             }
-            ReleaseSemaphore(context, message);
+            context.Done<IMessageActivity>(null);
         }
         public async Task _AStage1(IDialogContext context, IAwaitable<string> argument)
         {
@@ -494,14 +482,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     }
                 default:
                     {
-                        await context.PostAsync($"請輸入「prove」或「disprove」，您輸入的是「{message.Text}」<br/>任何時候輸入「quit」可以退出");
+                        await context.PostAsync($"請輸入「prove」或「disprove」，您輸入的是「{message.Text}」，任何時候輸入「quit」可以退出");
                         context.Wait(Stage1);
                         return;
                     }
             }
-            ReleaseSemaphore(context, message);
+            context.Done<IMessageActivity>(null);
         }
-        void ReleaseSemaphore(IDialogContext context, IMessageActivity message) { Main.MarkContextCompleted(message); context.Done(message); }
         public async Task _Stage1(IDialogContext context, IAwaitable<string> argument)
         {
             await Stage1(context, Awaitable.FromItem(new Activity { Text = await argument, From = new ChannelAccount() }));
@@ -510,7 +497,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         {
             var message = await argument;
             await context.PostAsync("想要對答案是吧？XD<br/>好，來！請輸入您的答案～<br/>任何時候輸入「quit」可以退出");
-            PromptDialog.Choice(context, _Stage1, new List<string> { "Prove", "Disprove","我要看答案！", "Quit" }, "請問您要prove還是disprove呢？", "請輸入「prove」或「disprove」<br/>任何時候輸入「quit」可以退出");
+            PromptDialog.Choice(context, _Stage1, new List<string> { "Prove", "Disprove","我要看答案！", "Quit" }, "請問您要prove還是disprove呢？", "請輸入「prove」或「disprove」，任何時候輸入「quit」可以退出");
         }
     }
 }

@@ -19,28 +19,24 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         async Task ResumeAfterFinalJudge(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if (message == null) return;
             context.Wait(MessageReceivedAsync);//TODO
         }
         async Task ResumeAfterGossiper(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if (message == null) return;
-            if (IsContextCompleted(message)) context.Wait(MessageReceivedAsync);
+            if (message == null) context.Wait(MessageReceivedAsync);
             else await context.Forward(new FinalJudge(), ResumeAfterFinalJudge, message);
         }
         async Task ResumeAfterUrlReactor(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if (message == null) return;
-            if (IsContextCompleted(message)) context.Wait(MessageReceivedAsync);
+            if (message == null) context.Wait(MessageReceivedAsync);
             else await context.Forward(new Gossiper(), ResumeAfterGossiper, message);
         }
         async Task ResumeAfterBasicJudge(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if (message == null) return;
-            if (IsContextCompleted(message)) context.Wait(MessageReceivedAsync);
+            if (message == null) context.Wait(MessageReceivedAsync);
             else await context.Forward(new Posts.UrlReactor(), ResumeAfterUrlReactor, message);
         }
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)

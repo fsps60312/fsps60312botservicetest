@@ -16,7 +16,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Mapping
     [Serializable]
     public static class Mapper
     {
-        static Dictionary<string, string> mapping = new Dictionary<string, string>
+        static Dictionary<string, string> mapping = new Dictionary<string, string>//input might be upper case
         {
             {"借我錢錢","借我錢" },
             {"我要說啥","我要說甚麼" },
