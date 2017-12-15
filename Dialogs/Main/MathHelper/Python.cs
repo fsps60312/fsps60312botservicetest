@@ -142,7 +142,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         await context.PostAsync("計算太久了，已中斷");
                     }
                     else if (e != null) throw e;
-                    else await context.PostAsync($"計算結果：{answer}");
+                    else
+                    {
+                        if (answer.Length > 600) answer = answer.Remove(250) + $"<br/>(中間還有{answer.Length - 500}位數)<br/>" + answer.Substring(answer.Length - 250);
+                        await context.PostAsync($"計算結果：{answer}");
+                    }
                     //var tokenSource = new CancellationTokenSource();
                     //tokenSource.CancelAfter(1000);
                     //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
