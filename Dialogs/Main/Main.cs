@@ -46,7 +46,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            Set(message, Constants.ConvertedMessageText, ConvertMessageText(message.Text));
+            //Set(message, Constants.ConvertedMessageText, ConvertMessageText(message.Text));
             await context.Forward(new BasicJudge(), ResumeAfterBasicJudge, message);
         }
     }
