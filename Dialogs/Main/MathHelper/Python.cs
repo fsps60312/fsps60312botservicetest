@@ -127,6 +127,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         catch (Exception error)
                         {
                             e = error;
+                            completed = true;
                         }
                     });
                     thread.IsBackground = true;
