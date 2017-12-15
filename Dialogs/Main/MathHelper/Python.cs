@@ -116,7 +116,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     bool completed = false;
                     var startTime = DateTime.Now;
                     Exception e = null;
-                    pythonCode = pythonCode.Trim(' ').Replace("^", "**");
+                    pythonCode = pythonCode.Trim(' ')
+                        .Replace('（', '(').Replace('）', ')').Replace('＋', '+').Replace('－', '-').Replace('＊','*').Replace('／','/').Replace('︿','^')
+                        .Replace("^", "**");
                     Thread thread = new Thread(() =>
                     {
                         try
