@@ -108,7 +108,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             if (message.Text.StartsWith("幫我算"))
             {
                 var pythonCode = message.Text.Substring(3);
-                await context.PostAsync($"計算中......{pythonCode}");
+                await context.PostAsync($"計算中... {pythonCode.Replace("*","\\*")}");
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
                 {
