@@ -127,11 +127,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         await Task.Delay(100);
                         if (completed) break;
                     }
-                    if(!completed)
+                    if (!completed)
                     {
                         thread.Abort();
                         await context.PostAsync("計算超時，已中斷");
                     }
+                    else await context.PostAsync(answer);
                     //var tokenSource = new CancellationTokenSource();
                     //tokenSource.CancelAfter(1000);
                     //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
