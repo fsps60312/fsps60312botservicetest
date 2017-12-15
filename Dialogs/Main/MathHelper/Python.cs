@@ -144,7 +144,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     else if (e != null) throw e;
                     else
                     {
-                        if (answer.Length > 600) answer = answer.Remove(250) + $"<br/>(中間還有{answer.Length - 500}位數)<br/>" + answer.Substring(answer.Length - 250);
+                        if (answer.Length > 600) answer = answer.Remove(250) + $"...<br/>(中間還有{answer.Length - 500}位數)<br/>..." + answer.Substring(answer.Length - 250);
                         await context.PostAsync($"計算結果：{answer}");
                     }
                     //var tokenSource = new CancellationTokenSource();
