@@ -24,12 +24,14 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 if (message.Text == null)
                 {
                     await context.PostAsync("吼～都這樣，不說點話嗎？><");
-                    Main.MarkContextCompleted(message);
+                    //Main.MarkContextCompleted(message);
+                    message=null;
                 }
                 else if (message.Text.Length > 250)
                 {
                     await context.PostAsync("???");
-                    Main.MarkContextCompleted(message);
+                    //Main.MarkContextCompleted(message);
+                    message=null;
                 }
             }
             finally { context.Done(message); }
