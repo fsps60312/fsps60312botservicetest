@@ -138,10 +138,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     if (!completed)
                     {
                         thread.Abort();
-                        await context.PostAsync("計算超時，已中斷");
+                        await context.PostAsync("計算太久了，已中斷");
                     }
                     else if (e != null) throw e;
-                    else await context.PostAsync(answer);
+                    else await context.PostAsync($"計算結果：{answer}");
                     //var tokenSource = new CancellationTokenSource();
                     //tokenSource.CancelAfter(1000);
                     //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
