@@ -19,22 +19,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            try
+            if (message.Text == null)
             {
-                if (message.Text == null)
-                {
-                    await context.PostAsync("吼～都這樣，不說點話嗎？><");
-                    //Main.MarkContextCompleted(message);
-                    message=null;
-                }
-                else if (message.Text.Length > 250)
-                {
-                    await context.PostAsync("???");
-                    //Main.MarkContextCompleted(message);
-                    message=null;
-                }
+                await context.PostAsync("吼～都這樣，不說點話嗎？><");
             }
-            finally { context.Done(message); }
+            else if (message.Text.Length > 250)
+            {
+                await context.PostAsync("???");
+            }
+            else context.Done(message);
         }
     }
 }
