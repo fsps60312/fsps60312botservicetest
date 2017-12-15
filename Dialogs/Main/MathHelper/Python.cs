@@ -115,10 +115,18 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     string answer = null;
                     bool completed = false;
                     var startTime = DateTime.Now;
+                    Exception e = null;
                     Thread thread = new Thread(() =>
                     {
-                        answer = UntrustedCode.PythonExecutor.Execute(pythonCode);
+                        try
+                        {
+                            answer = UntrustedCode.PythonExecutor.Execute(pythonCode);
                         completed = true;
+                        }
+                        catch(Exception error)
+                        {
+                            e = error;
+                        }
                     });
                     thread.IsBackground = true;
                     thread.Start();
@@ -132,6 +140,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         thread.Abort();
                         await context.PostAsync("計算超時，已中斷");
                     }
+                    else if (e != null) throw e;
                     else await context.PostAsync(answer);
                     //var tokenSource = new CancellationTokenSource();
                     //tokenSource.CancelAfter(1000);
