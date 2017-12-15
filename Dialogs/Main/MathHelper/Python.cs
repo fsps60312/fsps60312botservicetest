@@ -119,6 +119,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     pythonCode = pythonCode.Trim(' ')
                         .Replace('（', '(').Replace('）', ')').Replace('＋', '+').Replace('－', '-').Replace('＊','*').Replace('／','/').Replace('︿','^')
                         .Replace("^", "**");
+                    if(pythonCode.Contains("import os") || pythonCode.Contains("import sys") || pythonCode.Contains("import call") || pythonCode.Contains("import socket") ||
+                        pythonCode.Contains("os import") || pythonCode.Contains("sys import") || pythonCode.Contains("call import") || pythonCode.Contains("socket import"))
+                    {
+                        await context.PostAsync("你是駭客嗎？拜託教教小莫怎麼用利用這個python功能駭入bot，列出某資料夾底下的檔案之類的，拜託～ ><");
+                    }
                     Thread thread = new Thread(() =>
                     {
                         try
