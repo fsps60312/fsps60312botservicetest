@@ -243,7 +243,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                     }
                 default:
                     {
-                        var data = message.Text.Split(' ').Where((v) => !string.IsNullOrWhiteSpace(v)).ToList();
+                        var data = message.Text.Split(new char[] { ' ', '\r', '\n' }).Where((v) => !string.IsNullOrWhiteSpace(v)).ToList();
                         if (data.Count % 2 == 1)
                         {
                             await context.PostAsync($"您輸入了奇數 ({data.Count}) 個點，但正常來講不管幾條邊都會有偶數個點耶（每條邊2個點），要不要再檢查看看您的輸入呢？><<br/>「重新輸入」來重新輸入這M={M}條邊<br/>「重新輸入N和M」來重新輸入N和M");

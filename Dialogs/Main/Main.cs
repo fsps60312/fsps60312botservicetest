@@ -21,11 +21,17 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             var message = await argument;
             context.Wait(MessageReceivedAsync);//TODO
         }
-        async Task ResumeAfterGossiper(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        async Task ResumeAfterMathHelper(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
             if (message == null) context.Wait(MessageReceivedAsync);
             else await context.Forward(new FinalJudge(), ResumeAfterFinalJudge, message);
+        }
+        async Task ResumeAfterGossiper(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var message = await argument;
+            if (message == null) context.Wait(MessageReceivedAsync);
+            else await context.Forward(new MathHelper(), ResumeAfterMathHelper, message);
         }
         async Task ResumeAfterUrlReactor(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
