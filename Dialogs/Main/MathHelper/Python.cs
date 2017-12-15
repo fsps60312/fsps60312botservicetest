@@ -96,7 +96,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     // When we print informations from a SecurityException extra information can be printed if we are   
                     //calling it with a full-trust stack.  
                     (new PermissionSet(PermissionState.Unrestricted)).Assert();
-                    var ret= $"SecurityException caught:\n{ex}";
+                    var ret = $"SecurityException caught:\n{ex}";
                     CodeAccessPermission.RevertAssert();
                     return ret;
                 }
@@ -108,7 +108,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             if (message.Text.StartsWith("幫我算"))
             {
                 var pythonCode = message.Text.Substring(3);
-                await context.PostAsync($"計算中... {pythonCode.Replace("*","\\*")}");
+                await context.PostAsync($"計算中... {pythonCode.Replace("*", "\\*")}");
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
                 {
@@ -116,21 +116,22 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     bool completed = false;
                     var startTime = DateTime.Now;
                     Exception e = null;
+                    pythonCode = pythonCode.Trim(' ').Replace("^", "**");
                     Thread thread = new Thread(() =>
                     {
                         try
                         {
-                            answer = UntrustedCode.PythonExecutor.Execute(pythonCode);
-                        completed = true;
+                            answer = UntrustedCode.PythonExecutor.Execute($"from math import *\n{pythonCode}");
+                            completed = true;
                         }
-                        catch(Exception error)
+                        catch (Exception error)
                         {
                             e = error;
                         }
                     });
                     thread.IsBackground = true;
                     thread.Start();
-                    while((DateTime.Now-startTime).TotalSeconds<3)
+                    while ((DateTime.Now - startTime).TotalSeconds < 3)
                     {
                         await Task.Delay(100);
                         if (completed) break;
@@ -147,7 +148,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
                     //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), new System.Threading.CancellationTokenSource(1000).Token);
                 }
-                catch(Exception error)
+                catch (Exception error)
                 {
                     await context.PostAsync($"計算時發生問題：<br/>{error}");
                 }
