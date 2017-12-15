@@ -112,9 +112,29 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
                 {
-                    var tokenSource = new CancellationTokenSource();
-                    tokenSource.CancelAfter(1000);
-                    await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
+                    string answer = null;
+                    bool completed = false;
+                    var startTime = DateTime.Now;
+                    Thread thread = new Thread(() =>
+                    {
+                        answer = UntrustedCode.PythonExecutor.Execute(pythonCode);
+                        completed = true;
+                    });
+                    thread.IsBackground = true;
+                    thread.Start();
+                    while((DateTime.Now-startTime).TotalSeconds<3)
+                    {
+                        await Task.Delay(100);
+                        if (completed) break;
+                    }
+                    if(!completed)
+                    {
+                        thread.Abort();
+                        await context.PostAsync("計算超時，已中斷");
+                    }
+                    //var tokenSource = new CancellationTokenSource();
+                    //tokenSource.CancelAfter(1000);
+                    //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
                     //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), new System.Threading.CancellationTokenSource(1000).Token);
                 }
                 catch(Exception error)
