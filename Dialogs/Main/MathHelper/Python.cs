@@ -19,6 +19,7 @@ using System.Linq;
 using IronPython;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
+using System.Threading;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
@@ -111,7 +112,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
                 {
-                    await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), new System.Threading.CancellationTokenSource(1000).Token);
+                    var tokenSource = new CancellationTokenSource();
+                    tokenSource.CancelAfter(1000);
+                    await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
+                    //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), new System.Threading.CancellationTokenSource(1000).Token);
                 }
                 catch(Exception error)
                 {
