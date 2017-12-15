@@ -412,6 +412,57 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             }
             ReleaseSemaphore(context, message);
         }
+        public async Task AStage2(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var message = await argument;
+            switch (message.Text.ToLower())
+            {
+                case "我已經放棄了，就給我後悔吧":
+                    {
+                        await context.PostAsync("好啦，您真沒志氣(X)，硬要看答案也只好跟您說囉～");
+                        await Task.Delay(3000);
+                        await context.PostAsync("這題是反證");
+                        await Task.Delay(3000);
+                        await context.PostAsync("認真想一下會發現有反例（屬於平面圖、無法3著色，但最大團大小≤3），例如：");
+                        await Task.Delay(6000);
+                        await SendImage(context, "https://4.bp.blogspot.com/-p9UsT_8oO5U/WjM_cSm7CuI/AAAAAAAAKEU/tGA8Y4cI3BcwAfzJsCx8ZknsQ2Fd288PQCLcBGAs/s1600/Screenshot%2B%2528523%2529.png");
+                        await context.PostAsync("這只是其中一種反例，掰掰，看您能不能找到更簡單的囉～");
+                        break;
+                    }
+                case "既然你都這麼說了，那我還是想想看好了": await context.PostAsync("耶耶～很高興您終於想通了，加油！想到答案一定要記得告訴我哦！>///<"); break;
+                default:
+                    try { throw new NotImplementedException(); }
+                    catch (Exception error) { await Main.PrintBug(context, error.ToString()); break; }
+            }
+            ReleaseSemaphore(context, message);
+        }
+        public async Task _AStage2(IDialogContext context, IAwaitable<string> argument)
+        {
+            await AStage2(context, Awaitable.FromItem(new Activity { Text = await argument, From = new ChannelAccount() }));
+        }
+        public async Task AStage1(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var message = await argument;
+            switch (message.Text.ToLower())
+            {
+                case "不管，我要看答案":
+                    {
+                        await context.PostAsync("真的不再想想嗎？看完答案不要後悔哦～XD<br/>建議先自己想想看哦，不會很難的！ ;)");
+                        await Task.Delay(3000);
+                        PromptDialog.Choice(context, _AStage2, new List<string> { "我已經放棄了，就給我後悔吧", "既然你都這麼說了，那我還是想想看好了" }, "請選擇：", "請輸入「我已經放棄了，就給我後悔吧」或「既然你都這麼說了，那我還是想想看好了」");
+                        return;
+                    }
+                case "好吧，我再想想": await context.PostAsync("耶～很高興您做出了正確選擇，加油！想到答案要告訴我哦！>///<"); break;
+                default:
+                    try { throw new NotImplementedException(); }
+                    catch (Exception error) { await Main.PrintBug(context, error.ToString()); break; }
+            }
+            ReleaseSemaphore(context, message);
+        }
+        public async Task _AStage1(IDialogContext context, IAwaitable<string> argument)
+        {
+            await AStage1(context, Awaitable.FromItem(new Activity { Text = await argument, From = new ChannelAccount() }));
+        }
         public async Task Stage1(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
@@ -434,9 +485,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         context.Wait(Stage2);
                         return;
                     }
+                case "我要看答案！":
+                    {
+                        await context.PostAsync("真的要看答案嗎？<br/>這題真的很好玩耶，要不要再想一下？><");
+                        await Task.Delay(3000);
+                        PromptDialog.Choice(context, _AStage1, new List<string> { "不管，我要看答案", "好吧，我再想想" }, "請選擇：", "請輸入「不管，我要看答案」或「好吧，我再想想」");
+                        return;
+                    }
                 default:
                     {
-                        await context.PostAsync($"請輸入「prove」或「disprove」，您輸入的是「{message.Text}」");
+                        await context.PostAsync($"請輸入「prove」或「disprove」，您輸入的是「{message.Text}」<br/>任何時候輸入「quit」可以退出");
                         context.Wait(Stage1);
                         return;
                     }
@@ -444,7 +502,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             ReleaseSemaphore(context, message);
         }
         void ReleaseSemaphore(IDialogContext context, IMessageActivity message) { Main.MarkContextCompleted(message); context.Done(message); }
-        public async Task Stage0(IDialogContext context, IAwaitable<string> argument)
+        public async Task _Stage1(IDialogContext context, IAwaitable<string> argument)
         {
             await Stage1(context, Awaitable.FromItem(new Activity { Text = await argument, From = new ChannelAccount() }));
         }
@@ -452,7 +510,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         {
             var message = await argument;
             await context.PostAsync("想要對答案是吧？XD<br/>好，來！請輸入您的答案～<br/>任何時候輸入「quit」可以退出");
-            PromptDialog.Choice(context, Stage0, new List<string> { "Prove", "Disprove", "Quit" }, "請問您要prove還是disprove呢？", "請輸入「prove」或「disprove」");
+            PromptDialog.Choice(context, _Stage1, new List<string> { "Prove", "Disprove","我要看答案！", "Quit" }, "請問您要prove還是disprove呢？", "請輸入「prove」或「disprove」<br/>任何時候輸入「quit」可以退出");
         }
     }
 }
