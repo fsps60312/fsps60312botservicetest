@@ -42,7 +42,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"qq","好啦，乖（拍拍" },
             {"你好雷哦","你也很雷，別五十步笑百步www" },
             {"hi","恩？" },
-            {"在嗎","不在～（不知道你要幹嘛怎麼決定我要不要在呢？XD）" }
+            {"在嗎","不在～（不知道你要幹嘛怎麼決定我要不要在呢？XD）" },
+            {"ㄎㄎ","蝦？？<br/>不然我ㄎ回去好了<br/>ㄎㄎ" }
         };
         Dictionary<string, string> mappings = new Dictionary<string, string>
         {
