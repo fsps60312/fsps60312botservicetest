@@ -44,6 +44,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                                 }
                                 break;
                             case "1995730270697235": await context.Forward(new P1995730270697235(), ResumeAfterAnything, message);return;
+                            case "2003744179895844": await context.Forward(new P2003744179895844(), ResumeAfterAnything, message);return;
                             default: await context.PostAsync("Oops......這篇文沒有彩蛋哦～試試看別篇吧XD");message = null;break;
                         }
                     }

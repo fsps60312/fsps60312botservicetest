@@ -157,34 +157,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             return ret;
         }
         List<string> GetMaxCliqueForPlanar() { return BuildGraph().GetMaxCliqueForPlanar().Select(v => ET.ElementAt(v).Key).ToList(); }
-        async Task SendImage(IDialogContext context,string url)
-        {
-            //await context.PostAsync("");
-            var msg = context.MakeMessage();
-            //new Microsoft.Bot.Connector.Attachment(Microsoft.Bot.Connector.ActionTypes.ShowImage, "https://lh3.googleusercontent.com/cd3ESRhwidl-flcOj_rF6nqX6NShAiH8S2T5gafsR_RxymqNGxReTiwxmjtnoDYDML2h4ISp49Frmg=w1626-h1620-no");
-            var contentType = "image/png";
-            if (url.ToLower().EndsWith(".jpg")) contentType = "image/jpeg";// Not "image/jpg"
-            msg.Attachments.Add(new Attachment
-            {
-                ContentUrl = url,
-                ContentType = contentType,
-                Name = "圖示"
-            });
-            await context.PostAsync(msg);
-            //AdaptiveCard card = new AdaptiveCard();
-            //card.Body.Add(new TextBlock
-            //{
-            //    Text = "\u60f3\u8981\u5c0d\u7b54\u6848\u662f\u5427\uff1fXD<br/>\u597d\uff0c\u4f86\uff01\u8acb\u8f38\u5165\u60a8\u7684\u7b54\u6848\uff5e"/*想要對答案是吧？XD<br/>好，來！請輸入您的答案～*/,
-            //    Size = TextSize.Medium,
-            //    Weight = TextWeight.Normal
-            //});
-            //context.Activity.
-            //card.Actions.Add(new SuggestedActions
-            //{
-
-            //})
-            //throw new NotImplementedException();
-        }
         public async Task Stage4(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
@@ -198,16 +170,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         var rankingImage = "https://3.bp.blogspot.com/-xk_nfzqenUs/Wi9w_Pr2e2I/AAAAAAAAKDY/1VrYC2EUQUk1pikdKHZombO3FW5AaaxxwCLcBGAs/s1600/Screenshot%2B%2528503%2529.png";
                         var myDisprove = "https://2.bp.blogspot.com/-pBbGdM_p87w/Wi9yHDfetSI/AAAAAAAAKDo/GpQffboxOqY6FWd3rpo7zTXemOARDfaEgCPcBGAYYCw/s1600/DSC_0047.JPG";
                         await context.PostAsync($"題目網址：{problemUrl}");
-                        await SendImage(context, statusImage);
+                        await Main.PostImage(context, statusImage);
                         await context.PostAsync("其實呢這要從台大資工大二必修課作業開始講起，這堂課叫做ADA，第三次作業中有一題線上作業叫做「Metropolitan」");
                         await Task.Delay(10000);
-                        await SendImage(context, rankingImage);
+                        await Main.PostImage(context, rankingImage);
                         await context.PostAsync("行健同學一時想不出好的解法，只好直接假設了「若平面圖無法3著色則最大團大小等於4」這個性質是好的，然後照這個想法寫了一份code，傳上去就AC了XDD 還在速度上得到第1名！<(\\_ \\_)>");
                         await Task.Delay(15000);
                         await context.PostAsync("於是小莫就想要幫他驗證這個性質是不是好的。殊不知，就不小心找到反例了呢！>///<");
                         await Task.Delay(9000);
                         await context.PostAsync("這是小莫當初找到的反例哦：");
-                        await SendImage(context, myDisprove);
+                        await Main.PostImage(context, myDisprove);
                         await Task.Delay(5000);
                         await context.PostAsync("有沒有和你找到的反例一樣呢？ ;)");
                         await context.PostAsync("-----The End-----");
@@ -413,7 +385,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                         await Task.Delay(3000);
                         await context.PostAsync("認真想一下會發現有反例（屬於平面圖、無法3著色，但最大團大小≤3），例如：");
                         await Task.Delay(6000);
-                        await SendImage(context, "https://4.bp.blogspot.com/-p9UsT_8oO5U/WjM_cSm7CuI/AAAAAAAAKEU/tGA8Y4cI3BcwAfzJsCx8ZknsQ2Fd288PQCLcBGAs/s1600/Screenshot%2B%2528523%2529.png");
+                        await Main.PostImage(context, "https://4.bp.blogspot.com/-p9UsT_8oO5U/WjM_cSm7CuI/AAAAAAAAKEU/tGA8Y4cI3BcwAfzJsCx8ZknsQ2Fd288PQCLcBGAs/s1600/Screenshot%2B%2528523%2529.png");
                         await context.PostAsync("這只是其中一種反例，掰掰，看您能不能找到更簡單的囉～");
                         break;
                     }

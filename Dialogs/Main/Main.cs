@@ -68,6 +68,34 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     public partial class Main
     {
         public static Random Rand = new Random();
+        public static async Task PostImage(IDialogContext context, string url)
+        {
+            //await context.PostAsync("");
+            var msg = context.MakeMessage();
+            //new Microsoft.Bot.Connector.Attachment(Microsoft.Bot.Connector.ActionTypes.ShowImage, "https://lh3.googleusercontent.com/cd3ESRhwidl-flcOj_rF6nqX6NShAiH8S2T5gafsR_RxymqNGxReTiwxmjtnoDYDML2h4ISp49Frmg=w1626-h1620-no");
+            var contentType = "image/png";
+            if (url.ToLower().EndsWith(".jpg")) contentType = "image/jpeg";// Not "image/jpg"
+            msg.Attachments.Add(new Attachment
+            {
+                ContentUrl = url,
+                ContentType = contentType,
+                Name = "圖示"
+            });
+            await context.PostAsync(msg);
+            //AdaptiveCard card = new AdaptiveCard();
+            //card.Body.Add(new TextBlock
+            //{
+            //    Text = "\u60f3\u8981\u5c0d\u7b54\u6848\u662f\u5427\uff1fXD<br/>\u597d\uff0c\u4f86\uff01\u8acb\u8f38\u5165\u60a8\u7684\u7b54\u6848\uff5e"/*想要對答案是吧？XD<br/>好，來！請輸入您的答案～*/,
+            //    Size = TextSize.Medium,
+            //    Weight = TextWeight.Normal
+            //});
+            //context.Activity.
+            //card.Actions.Add(new SuggestedActions
+            //{
+
+            //})
+            //throw new NotImplementedException();
+        }
         public static bool IsContextCompleted(IMessageActivity message)
         {
             Newtonsoft.Json.Linq.JToken value;
