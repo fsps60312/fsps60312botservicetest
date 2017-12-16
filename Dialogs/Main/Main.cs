@@ -35,6 +35,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         }
         async Task ResumeAfterUrlReactor(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
+            await ResumeAfterGossiper(context, argument);return;
             var message = await argument;
             if (message == null) context.Wait(MessageReceivedAsync);
             else await context.Forward(new Gossiper(), ResumeAfterGossiper, message);
