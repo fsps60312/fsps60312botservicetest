@@ -53,14 +53,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"你","很棒 (y) (X)" },
             {"好哦","\\(^o^)/（雖然不知道發生甚麼事XD）" },
             {"不好說","真的不好說（咦？）" },
-            {"OMG","喵(?)" }
+            {"OMG","喵(?)" },
+            {"這是自動回覆嗎","有可能是，也有可能不是(?)" }
         };
         Dictionary<string, string> mappings = new Dictionary<string, string>//input must be lower case
         {
             { "chat bot","bot" },
             { "chatbot","bot" },
             {"bye bye","掰掰" },
-            {"bye","掰掰" }
+            {"bye","掰掰" },
+            {"掰","掰掰" }
         };
         private string MapMessage(string message)
         {
