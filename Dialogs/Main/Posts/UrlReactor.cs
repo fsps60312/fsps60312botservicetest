@@ -21,8 +21,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
             var message = await argument;
             switch (message.Text)
             {
-                case "https://codingsimplifylife.blogspot.tw/": await context.PostAsync("code風景區！！！歡迎常來逛逛～～～你會發現，寫程式就像欣賞風景一樣快樂哦！");message = null;break;
-                case "https://codingsimplifylife.blogspot.tw/2016/04/c.html": await context.PostAsync("給新手的C++教學！！！號稱網路上對新手最友善的C++教學，歡迎推薦給親朋好友，或提供改善建議哦！"); message = null;break;
+                case "https://codingsimplifylife.blogspot.tw/": await context.PostAsync("code風景區！！！歡迎常來逛逛～～～你會發現，寫程式就像欣賞風景一樣快樂哦！"); message = null; break;
+                case "https://codingsimplifylife.blogspot.tw/2016/04/c.html": await context.PostAsync("給新手的C++教學！！！號稱網路上對新手最友善的C++教學，歡迎推薦給親朋好友，或提供改善建議哦！"); message = null; break;
                 default:
                     {
                         switch (GetPostId(message.Text))
@@ -43,9 +43,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
                                     }
                                 }
                                 break;
-                            case "1995730270697235": await context.Forward(new P1995730270697235(), ResumeAfterAnything, message);return;
-                            case "2003744179895844": await context.Forward(new P2003744179895844(), ResumeAfterAnything, message);return;
-                            default: await context.PostAsync("Oops......這篇文沒有彩蛋哦～試試看別篇吧XD");message = null;break;
+                            case "1995730270697235": await context.Forward(new P1995730270697235(), ResumeAfterAnything, message); return;
+                            case "2002954469974815": await context.Forward(new P2002954469974815(), ResumeAfterAnything, message); return;
+                            case "2003744179895844": await context.Forward(new P2003744179895844(), ResumeAfterAnything, message); return;
+                            default: await context.PostAsync("Oops......這篇文沒有彩蛋哦～試試看別篇吧XD"); message = null; break;
                         }
                     }
                     break;
