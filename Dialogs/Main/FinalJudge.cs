@@ -27,7 +27,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 case "我要說甚麼":
                     {
                         var commands = Constants.Commands.ListCommands();
-                        await context.PostAsync($"你可以說說看：{commands[Rand.Next(commands.Count)]}");
+                        await context.PostAsync($"你可以說說看：{commands[Main.Rand.Next(commands.Count)]}");
                     }
                     break;
                 case Constants.Commands.C1:
@@ -93,7 +93,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         string msg = message.Text;
                         if (ganTalkLeaderBoard == null) ganTalkLeaderBoard = new GanTalkLeaderBoard();
                         ganTalkLeaderBoard.Update(message.From.Id, msg);
-                        switch ((int)(Rand.NextDouble() * 6))
+                        switch (Main.Rand.Next(6))
                         {
                             case 0: break;
                             case 1: msg = "你說了「" + msg + "」"; break;
@@ -141,7 +141,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         }
         // Azure page: https://portal.azure.com/#blade/WebsitesExtension/BotsIFrameBlade/id/%2Fsubscriptions%2Fed3b27fa-21db-4e94-8061-2d654c6b87d5%2FresourceGroups%2Ffsps60312botservicetest%2Fproviders%2FMicrosoft.Web%2Fsites%2Ffsps60312botservicetest
         // Unicode convert: https://www.ifreesite.com/unicode-ascii-ansi.htm
-        static Random Rand = new Random();
         [Serializable]
         class LastUserMessageData
         {

@@ -29,22 +29,34 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         }
         async Task ResumeAfterGossiper(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
-            var message = await argument;
-            if (message == null) context.Wait(MessageReceivedAsync);
-            else await context.Forward(new MathHelper(), ResumeAfterMathHelper, message);
+            try
+            {
+                var message = await argument;
+                if (message == null) context.Wait(MessageReceivedAsync);
+                else await context.Forward(new MathHelper(), ResumeAfterMathHelper, message);
+            }
+            catch (Exception error) { await context.PostAsync(error.ToString()); }
         }
         async Task ResumeAfterUrlReactor(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
-            await ResumeAfterGossiper(context, argument);return;
-            var message = await argument;
-            if (message == null) context.Wait(MessageReceivedAsync);
-            else await context.Forward(new Gossiper(), ResumeAfterGossiper, message);
+            try
+            {
+                //await ResumeAfterGossiper(context, argument); return;
+                var message = await argument;
+                if (message == null) context.Wait(MessageReceivedAsync);
+                else await context.Forward(new Gossiper(), ResumeAfterGossiper, message);
+            }
+            catch (Exception error) { await context.PostAsync(error.ToString()); }
         }
         async Task ResumeAfterBasicJudge(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
-            var message = await argument;
-            if (message == null) context.Wait(MessageReceivedAsync);
-            else await context.Forward(new Posts.UrlReactor(), ResumeAfterUrlReactor, message);
+            try
+            {
+                var message = await argument;
+                if (message == null) context.Wait(MessageReceivedAsync);
+                else await context.Forward(new Posts.UrlReactor(), ResumeAfterUrlReactor, message);
+            }
+            catch(Exception error) { await context.PostAsync(error.ToString()); }
         }
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -55,6 +67,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     }
     public partial class Main
     {
+        public static Random Rand = new Random();
         public static bool IsContextCompleted(IMessageActivity message)
         {
             Newtonsoft.Json.Linq.JToken value;

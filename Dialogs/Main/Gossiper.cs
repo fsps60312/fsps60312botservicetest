@@ -24,12 +24,30 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             messageText = MapMessage(messageText);
             if (gossips.ContainsKey(messageText))
             {
-                await context.PostAsync(gossips[messageText]);
+                var list = gossips[messageText];
+                await context.PostAsync(list[Main.Rand.Next(list.Count)]);
                 message = null;
             }
             context.Done(message);
         }
-        Dictionary<string, string> gossips = new Dictionary<string, string>//input must be lower case
+        Dictionary<string, List<string>> __gossips__ = null;
+        Dictionary<string, List<string>> gossips
+        {
+            get
+            {
+                if (__gossips__ == null)
+                {
+                    __gossips__ = new Dictionary<string, List<string>>();
+                    for (int i = 0; i < gossipData.GetLength(0); i++)
+                    {
+                        if (!__gossips__.ContainsKey(gossipData[i, 0])) __gossips__.Add(gossipData[i, 0], new List<string>());
+                        __gossips__[gossipData[i, 0]].Add(gossipData[i, 1]);
+                    }
+                }
+                return __gossips__;
+            }
+        }
+        string[,] gossipData = new string[23, 2]//input must be lower case
         {
             { "code風景區", "很棒的名字，不覺得嗎？XD<br/>然後，我的英文名字是「code scenic」哦，Google看看！<br/>總之，像欣賞風景一樣快樂的探索程式之美吧！"},
             //{"Code風景區" ,"很棒的名字，不覺得嗎？XD<br/>然後，我的英文名字是「Code Scenic」哦，Google看看！<br/>總之，像欣賞風景一樣快樂的探索程式之美吧！"},
@@ -53,17 +71,28 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"你","很棒 (y) (X)" },
             {"好哦","\\(^o^)/（雖然不知道發生甚麼事XD）" },
             {"不好說","真的不好說（咦？）" },
-            {"OMG","喵(?)" },
+            {"omg","喵(?)" },
             {"這是自動回覆嗎","有可能是，也有可能不是(?)" }
         };
-        Dictionary<string, string> mappings = new Dictionary<string, string>//input must be lower case
+        Dictionary<string, string> __mappings__ = null;
+        Dictionary<string, string> mappings
         {
-            { "chat bot","bot" },
-            { "chatbot","bot" },
-            {"bye bye","掰掰" },
-            {"bye","掰掰" },
-            {"掰","掰掰" }
-        };
+            get
+            {
+                if (__mappings__ == null)
+                {
+                    __mappings__ = new Dictionary<string, string>//input must be lower case
+                    {
+                        { "chat bot","bot" },
+                        { "chatbot","bot" },
+                        {"bye bye","掰掰" },
+                        {"bye","掰掰" },
+                        {"掰","掰掰" }
+                    };
+                }
+                return __mappings__;
+            }
+        }
         private string MapMessage(string message)
         {
             message = message.ToLower().Trim(' ');
