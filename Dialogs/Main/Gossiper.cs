@@ -15,7 +15,7 @@ using System.Linq;
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
     [Serializable]
-    public class Gossiper: MyDialog<IMessageActivity>
+    public class Gossiper : MyDialog<IMessageActivity>
     {
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
@@ -43,16 +43,20 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"你好雷哦","你也很雷，別五十步笑百步www" },
             {"hi","恩？" },
             {"在嗎","不在～（不知道你要幹嘛怎麼決定我要不要在呢？XD）" },
-            {"ㄎㄎ","蝦？？<br/>不然我ㄎ回去好了<br/>ㄎㄎ" }
+            {"ㄎㄎ","蝦？？<br/>不然我ㄎ回去好了<br/>ㄎㄎ" },
+            {"掰掰","掰掰～歡迎隨時再傳訊息給我哦！>///<<br/>還是你只是說好玩的(?)" },
+            {"好吧","耶耶～～" }
         };
-        Dictionary<string, string> mappings = new Dictionary<string, string>
+        Dictionary<string, string> mappings = new Dictionary<string, string>//input must be lower case
         {
             { "chat bot","bot" },
             { "chatbot","bot" },
+            {"bye bye","掰掰" },
+            {"bye","掰掰" }
         };
         private string MapMessage(string message)
         {
-            message = message.ToLower();
+            message = message.ToLower().Trim(' ');
             while (mappings.ContainsKey(message)) message = mappings[message];
             return message;
         }
