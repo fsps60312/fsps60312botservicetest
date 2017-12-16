@@ -50,7 +50,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {"所以你是誰","才不告訴你呢www" },
             {"不好說","對呀，不好說(?)" },
             {"你嗎","你猜呀～ ^_^" },
-            {"你","很棒 (y) (X)" }
+            {"你","很棒 (y) (X)" },
+            {"好哦","\\(^o^)/（雖然不知道發生甚麼事XD）" }
         };
         Dictionary<string, string> mappings = new Dictionary<string, string>//input must be lower case
         {
