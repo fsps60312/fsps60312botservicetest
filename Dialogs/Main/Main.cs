@@ -78,7 +78,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         }
         public static string ConvertMessageText(string msg)
         {
-            msg = msg.Replace("？", "?").Replace("什麼", "甚麼").Replace("神麼", "甚麼").Replace('喔', '哦').Replace('\t', ' ').TrimEnd(new char[] { '?', ' ' }).TrimStart(' ');
+            msg = msg.Replace("？", "?").Replace("什麼", "甚麼").Replace("神麼", "甚麼").Replace("啥","甚麼").Replace('喔', '哦').Replace('\t', ' ').TrimEnd(new char[] { '?', ' ' }).TrimStart(' ');
             msg = RemoveDuplicatedSpaces(msg);
             return Mapping.Mapper.Map(msg);
         }
