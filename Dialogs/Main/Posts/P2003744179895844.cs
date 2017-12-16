@@ -40,7 +40,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot.Posts
         {
             var message = await argument;
             await Main.PostImage(context,"https://1.bp.blogspot.com/-Pl5CWtj-KrQ/WjVLr97yhcI/AAAAAAAAKEk/u9QQIa998HEF4_f8WR15_eV8_6m7rsdZwCLcBGAs/s1600/Screenshot%2B%2528525%2529.png");
-            await context.PostAsync("其實是這一段code出問題啦，您找到問題在哪裡了嗎？<br/>（當然要發現問題出在這一段code也是花了好一番功夫啦Orz）");
+            await context.PostAsync("其實是這一段code出問題啦，您找到問題在哪裡了嗎？<br/>當然要發現問題出在這一段code也是花了好一番功夫啦Orz<br/>然後其實圖片中的code是縮減版本，小莫在debug的時候這段code有25行那麼長～");
             PromptDialog.Choice(context, _Stage1, new List<string> { "我知道問題在哪了，真的好蠢www", "問題到底在哪裡？><" }, "請問您的狀況？", "請輸入「我知道問題在哪了，真的好蠢www」或「問題到底在哪裡？><」");
         }
     }
