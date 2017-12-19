@@ -102,6 +102,44 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 }
             }
         }
+        public static async Task<string>ExecutePython(string pythonCode)
+        {
+            string answer = null;
+            bool completed = false;
+            var startTime = DateTime.Now;
+            Exception e = null;
+            Thread thread = new Thread(() =>
+            {
+                try
+                {
+                    answer = UntrustedCode.PythonExecutor.Execute($"from math import *\n{pythonCode}");
+                    completed = true;
+                }
+                catch (Exception error)
+                {
+                    e = error;
+                    completed = true;
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start();
+            while ((DateTime.Now - startTime).TotalSeconds < 3)
+            {
+                await Task.Delay(100);
+                if (completed) break;
+            }
+            if (!completed)
+            {
+                thread.Abort();
+                throw new TimeoutException();
+            }
+            else if (e != null) throw e;
+            else
+            {
+                if (answer.Length > 600) answer = answer.Remove(250) + $"...<br/>(中間還有{answer.Length - 500}位數)<br/>..." + answer.Substring(answer.Length - 250);
+                return answer;
+            }
+        }
         string processPythonCode(string code,bool allDouble)
         {
             code = code.Trim(' ')
@@ -140,10 +178,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
                 {
-                    string answer = null;
-                    bool completed = false;
-                    var startTime = DateTime.Now;
-                    Exception e = null;
                     pythonCode = processPythonCode(pythonCode, transToDouble);
                     //await context.PostAsync(pythonCode);
                     //if(pythonCode.Contains("import os") || pythonCode.Contains("import sys") || pythonCode.Contains("import call") || pythonCode.Contains("import socket") ||
@@ -152,41 +186,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     {
                         await context.PostAsync("你是駭客嗎？拜託教教小莫怎麼用利用這個python功能駭入bot，列出某資料夾底下的檔案之類的，拜託～ ><");
                     }
-                    Thread thread = new Thread(() =>
-                    {
-                        try
-                        {
-                            answer = UntrustedCode.PythonExecutor.Execute($"from math import *\n{pythonCode}");
-                            completed = true;
-                        }
-                        catch (Exception error)
-                        {
-                            e = error;
-                            completed = true;
-                        }
-                    });
-                    thread.IsBackground = true;
-                    thread.Start();
-                    while ((DateTime.Now - startTime).TotalSeconds < 3)
-                    {
-                        await Task.Delay(100);
-                        if (completed) break;
-                    }
-                    if (!completed)
-                    {
-                        thread.Abort();
-                        await context.PostAsync("計算太久了，已中斷");
-                    }
-                    else if (e != null) throw e;
-                    else
-                    {
-                        if (answer.Length > 600) answer = answer.Remove(250) + $"...<br/>(中間還有{answer.Length - 500}位數)<br/>..." + answer.Substring(answer.Length - 250);
-                        await context.PostAsync($"計算結果：{answer}");
-                    }
-                    //var tokenSource = new CancellationTokenSource();
-                    //tokenSource.CancelAfter(1000);
-                    //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), tokenSource.Token);   //Execute a long running process
-                    //await Task.Run(async () => await context.PostAsync(UntrustedCode.PythonExecutor.Execute(pythonCode)), new System.Threading.CancellationTokenSource(1000).Token);
+                    await context.PostAsync($"計算結果：{await ExecutePython(pythonCode)}");
+                }
+                catch(TimeoutException)
+                {
+                    await context.PostAsync("計算太久了，已中斷");
                 }
                 catch (Exception error)
                 {
