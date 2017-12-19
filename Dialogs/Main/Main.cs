@@ -68,6 +68,26 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     public partial class Main
     {
         public static Random Rand = new Random();
+        static bool IsNumber(char c) { return '0' <= c && c <= '9'; }
+        public static List<double>ReadDoubles(string s)
+        {
+            List<double> ans = new List<double>();
+            int i = 0;
+            while(i<s.Length)
+            {
+                for (; i < s.Length && !IsNumber(s[i]); i++) ;
+                if (i >= s.Length) break;
+                double v = 0;
+                for (; i < s.Length && IsNumber(s[i]);i++) v = v * 10 + s[i] - '0';
+                if(i<s.Length&&s[i]=='.')
+                {
+                    i++;
+                    for (double d = 0.1; i < s.Length && IsNumber(s[i]); d *= 0.1, i++) v += d * (s[i] - '0');
+                }
+                ans.Add(v);
+            }
+            return ans;
+        }
         public static async Task PostImage(IDialogContext context, string url)
         {
             //await context.PostAsync("");

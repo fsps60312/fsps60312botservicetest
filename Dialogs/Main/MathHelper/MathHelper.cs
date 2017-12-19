@@ -25,10 +25,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             var message = await argument;
             context.Done(message);
         }
+        async Task ResumeAfterVectorNormalizer(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var message = await argument;
+            if (message == null) context.Done(message);
+            else await context.Forward(new Python(), ResumeAfterPython, message);
+        }
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            await context.Forward(new Python(), ResumeAfterPython, message);
+            await context.Forward(new VectorNormalizer(), ResumeAfterVectorNormalizer, message);
         }
     }
 }
