@@ -31,7 +31,24 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             public queryresultClass queryresult;
             public class queryresultClass
             {
-                public bool success, error;
+                public bool success;
+                public errorClass error;
+                public class errorClass
+                {
+                    public string code, msg;
+                    public static implicit operator errorClass(bool value)
+                    {
+                        System.Diagnostics.Trace.Assert(!value);
+                        return null;
+                    }
+                    public static implicit operator bool(errorClass value)
+                    {
+                        // assuming, that 1 is true;
+                        // somehow this method should deal with value == null case
+                        return value != null && (value.code != null || value.msg != null);
+                    }
+
+                }
                 public List<podsClass> pods;
                 public class podsClass
                 {
@@ -55,10 +72,18 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if(message.Text.StartsWith("Walfram"))
+            if (message.Text.StartsWith("Walfram"))
+            {
+                await context.PostAsync($"取得Walfram Alpha計算結果...{message.Text.Substring(7)}");
+                await Task.Delay(2000);
+                await context.PostAsync("你拼錯字啦，你好雷喔！ :P");
+                await context.PostAsync("是「Wolfram」啦！XD");
+                message = null;
+            }
+            else if(message.Text.StartsWith("Wolfram"))
             {
                 string q = message.Text.Substring(7);
-                await context.PostAsync($"取得Walfram Alpha計算結果...{q}");
+                await context.PostAsync($"取得Wolfram Alpha計算結果...{q}");
                 var client = new HttpClient();
                 var url = $"http://api.wolframalpha.com/v2/query?input={System.Net.WebUtility.UrlEncode(q)}&format=image,moutput&output=JSON&appid={appid}";
                 //await context.PostAsync(url);
@@ -72,7 +97,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         var obj = JsonConvert.DeserializeObject<WalframQueryResult>(json);
                         if(!obj.queryresult.success||obj.queryresult.error)
                         {
-                            await context.PostAsync($"success: {obj.queryresult.success}<br/>error: {obj.queryresult.error}<br/>{json}");
+                            string err = "";
+                            if (obj.queryresult.error != null) err = $"Error code: {obj.queryresult.error.code}<br/>Error message: {obj.queryresult.error.msg}";
+                            await context.PostAsync($"success: {obj.queryresult.success}<br/>{err}<br/>{json}");
                         }
                         else
                         {
