@@ -102,12 +102,40 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 }
             }
         }
+        string processPythonCode(string code,bool allDouble)
+        {
+            code = code.Trim(' ')
+                        .Replace('（', '(').Replace('）', ')').Replace('＋', '+').Replace('－', '-').Replace('＊', '*').Replace('／', '/').Replace('︿', '^')
+                        .Replace("^", "**");
+            if (allDouble)
+            {
+                string ans = "";
+                for (int i = 0; i < code.Length; i++)
+                {
+                    if(char.IsNumber(code[i]))
+                    {
+                        for (; i < code.Length && char.IsNumber(code[i]); i++) ans += code[i];
+                        ans += '.';
+                        if (i < code.Length && code[i] == '.')
+                        {
+                            for (i++; i < code.Length && char.IsNumber(code[i]); i++) ans += code[i];
+                        }
+                        i--;
+                    }
+                    else ans += code[i];
+                }
+                code = ans;
+            }
+            return code;
+        }
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if (message.Text.StartsWith("幫我算"))
+            if (message.Text.StartsWith("幫我算")||message.Text.StartsWith("幫算"))
             {
-                var pythonCode = message.Text.Substring(3);
+                var pythonCode = message.Text;
+                bool transToDouble = pythonCode.StartsWith("幫我算");
+                pythonCode = pythonCode.Substring(transToDouble?3:2);
                 await context.PostAsync($"計算中... {pythonCode.Replace("*", "\\*")}");
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
@@ -116,11 +144,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     bool completed = false;
                     var startTime = DateTime.Now;
                     Exception e = null;
-                    pythonCode = pythonCode.Trim(' ')
-                        .Replace('（', '(').Replace('）', ')').Replace('＋', '+').Replace('－', '-').Replace('＊','*').Replace('／','/').Replace('︿','^')
-                        .Replace("^", "**");
-                    if(pythonCode.Contains("import os") || pythonCode.Contains("import sys") || pythonCode.Contains("import call") || pythonCode.Contains("import socket") ||
-                        pythonCode.Contains("os import") || pythonCode.Contains("sys import") || pythonCode.Contains("call import") || pythonCode.Contains("socket import"))
+                    pythonCode = processPythonCode(pythonCode, transToDouble);
+                    //await context.PostAsync(pythonCode);
+                    //if(pythonCode.Contains("import os") || pythonCode.Contains("import sys") || pythonCode.Contains("import call") || pythonCode.Contains("import socket") ||
+                    //    pythonCode.Contains("os import") || pythonCode.Contains("sys import") || pythonCode.Contains("call import") || pythonCode.Contains("socket import"))
+                    if (pythonCode.Contains("import"))
                     {
                         await context.PostAsync("你是駭客嗎？拜託教教小莫怎麼用利用這個python功能駭入bot，列出某資料夾底下的檔案之類的，拜託～ ><");
                     }
