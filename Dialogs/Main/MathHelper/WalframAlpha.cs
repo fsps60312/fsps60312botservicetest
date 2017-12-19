@@ -1,0 +1,98 @@
+﻿using System;
+using System.IO;
+using System.Security;
+using System.Security.Policy;
+using System.Security.Permissions;
+using System.Runtime.Remoting;
+using System.Threading.Tasks;
+
+using Microsoft.Bot.Connector;
+using Microsoft.Bot.Builder.Dialogs;
+using System.Net.Http;
+using System.Text;
+
+using Newtonsoft.Json;
+
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
+using IronPython;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
+using System.Threading;
+
+namespace Microsoft.Bot.Sample.SimpleEchoBot
+{
+    [Serializable]
+    public class WalframAlpha : MyDialog<IMessageActivity>
+    {
+        class WalframQueryResult
+        {
+            public queryresultClass queryresult;
+            public class queryresultClass
+            {
+                public bool success, error;
+                public List<podsClass> pods;
+                public class podsClass
+                {
+                    public string title;
+                    public List<subpodsClass> subpods;
+                    public class subpodsClass
+                    {
+                        public string title;
+                        public imgClass img;
+                        public class imgClass
+                        {
+                            public string src;
+                        }
+                        public string plaintext;
+                        public string moutput;
+                    }
+                }
+            }
+        }
+        const string appid = "PRE8LA-29W6W87WAR";
+        protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var message = await argument;
+            if(message.Text.StartsWith("Walfram"))
+            {
+                string q = message.Text.Substring(7);
+                await context.PostAsync($"取得Walfram Alpha計算結果...{q}");
+                var client = new HttpClient();
+                var url = $"http://api.wolframalpha.com/v2/query?input={System.Net.WebUtility.UrlEncode(q)}&format=image,moutput&output=JSON&appid={appid}";
+                //await context.PostAsync(url);
+                var response= await client.PostAsync(url, null);
+                using (HttpContent content = response.Content)
+                {
+                    string json = await content.ReadAsStringAsync();
+                    //await context.PostAsync(json);
+                    try
+                    {
+                        var obj = JsonConvert.DeserializeObject<WalframQueryResult>(json);
+                        if(!obj.queryresult.success||obj.queryresult.error)
+                        {
+                            await context.PostAsync($"success: {obj.queryresult.success}<br/>error: {obj.queryresult.error}<br/>{json}");
+                        }
+                        else
+                        {
+                            foreach(var pod in obj.queryresult.pods)
+                            {
+                                if (!string.IsNullOrWhiteSpace(pod.title)) await context.PostAsync($"{pod.title}：");
+                                foreach(var subpod in pod.subpods)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(subpod.title)) await context.PostAsync($"{subpod.title}:");
+                                    await context.PostAsync(string.IsNullOrEmpty(subpod.moutput) ? subpod.plaintext : subpod.moutput);
+                                    await Main.PostImage(context, subpod.img.src);
+                                }
+                            }
+                        }
+                    }
+                    catch(Exception error) { await context.PostAsync($"解析資料時發生問題：<br/>{error}<br/>原始資料：{json}"); }
+                }
+                message = null;
+            }
+            context.Done(message);
+        }
+    }
+}
