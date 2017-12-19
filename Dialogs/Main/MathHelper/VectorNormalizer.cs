@@ -29,9 +29,14 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
-            if (message.Text.StartsWith("幫我標準化"))
+            if (message.Text.StartsWith("標準化"))
             {
-                var values = Main.ReadDoubles(message.Text.Substring(5));
+                await context.PostAsync($"正在標準化...{message.Text.Substring(5)}");
+                var values = new List<double>(
+                    await Task.WhenAll(message.Text.Substring(5).TrimStart('<').TrimEnd('>').Split(',')
+                    .Select(async s => await Python.ExecutePython(Python.ProcessPythonCode(s, true)))
+                    .Select(async s=>double.Parse(await s)))
+                    );
                 await context.PostAsync($"<{string.Join(", ", values)}>的標準化：");
                 double length = 0;
                 values.ForEach(v => length += v * v);

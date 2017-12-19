@@ -140,7 +140,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 return answer;
             }
         }
-        string processPythonCode(string code,bool allDouble)
+        public static string ProcessPythonCode(string code,bool allDouble)
         {
             code = code.Trim(' ')
                         .Replace('（', '(').Replace('）', ')').Replace('＋', '+').Replace('－', '-').Replace('＊', '*').Replace('／', '/').Replace('︿', '^')
@@ -178,7 +178,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 //await context.PostAsync(Sandboxer.ExecutePython(pythonCode));
                 try
                 {
-                    pythonCode = processPythonCode(pythonCode, transToDouble);
+                    pythonCode = ProcessPythonCode(pythonCode, transToDouble);
                     //await context.PostAsync(pythonCode);
                     //if(pythonCode.Contains("import os") || pythonCode.Contains("import sys") || pythonCode.Contains("import call") || pythonCode.Contains("import socket") ||
                     //    pythonCode.Contains("os import") || pythonCode.Contains("sys import") || pythonCode.Contains("call import") || pythonCode.Contains("socket import"))
