@@ -511,7 +511,7 @@
     <Compile Include="Dialogs\Main\MathHelper\MathHelper.cs" />
     <Compile Include="Dialogs\Main\MathHelper\Python.cs" />
     <Compile Include="Dialogs\Main\MathHelper\VectorNormalizer.cs" />
-    <Compile Include="Dialogs\Main\MathHelper\WalframAlpha.cs" />
+    <Compile Include="Dialogs\Main\MathHelper\WolframAlpha.cs" />
     <Compile Include="Dialogs\Main\MyImageCreator.cs" />
     <Compile Include="Dialogs\Main\Posts\P1995730270697235.cs" />
     <Compile Include="Dialogs\Main\Posts\P2002954469974815.cs" />

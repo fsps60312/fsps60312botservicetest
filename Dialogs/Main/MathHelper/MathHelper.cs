@@ -35,7 +35,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             var message = await argument;
             if (message == null) context.Done(message);
-            else await context.Forward(new WalframAlpha(), ResumeAfterWalframAlpha, message);
+            else await context.Forward(new WolframAlpha(), ResumeAfterWalframAlpha, message);
         }
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {

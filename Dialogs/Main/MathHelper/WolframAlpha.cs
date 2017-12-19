@@ -24,9 +24,9 @@ using System.Threading;
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
     [Serializable]
-    public class WalframAlpha : MyDialog<IMessageActivity>
+    public class WolframAlpha : MyDialog<IMessageActivity>
     {
-        class WalframQueryResult
+        class WolframQueryResult
         {
             public queryresultClass queryresult;
             public class queryresultClass
@@ -94,7 +94,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     //await context.PostAsync(json);
                     try
                     {
-                        var obj = JsonConvert.DeserializeObject<WalframQueryResult>(json);
+                        var obj = JsonConvert.DeserializeObject<WolframQueryResult>(json);
                         if(!obj.queryresult.success||obj.queryresult.error)
                         {
                             string err = "";
