@@ -28,6 +28,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     {
         class WolframQueryResult
         {
+#pragma warning disable 0649
             public queryresultClass queryresult;
             public class queryresultClass
             {
@@ -67,6 +68,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     }
                 }
             }
+#pragma warning restore 0649
         }
         const string appid = "PRE8LA-29W6W87WAR";
         protected override async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
